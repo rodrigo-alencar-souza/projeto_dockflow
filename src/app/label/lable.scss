@@ -45,11 +45,14 @@ body {
 }
 
 .dropdown {
-  position: absolute;
-  top: 60px;
-  left: 1rem;
+  position:absolute;
+  height: 86%;
+  top: 11%;
+  // top:20px;
+  // left: 1rem;
   background-color: #111;
-  border: 1px solid #e50914;
+  // border: 0px 1px 0px 0px solid #e50914;
+  border-right: 0.02rem solid #e50914;
   border-radius: 4px;
   padding: 0.5rem 0;
   z-index: 1000;
@@ -61,6 +64,9 @@ body {
   color: #fff;
   text-decoration: none;
 }
+
+
+
 
 .dropdown a:hover {
   background-color: #e50914;

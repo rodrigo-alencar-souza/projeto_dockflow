@@ -7,10 +7,12 @@
     <button class="login-button" (click)="Login_navigate()"> Login </button>
   </header>
 
-  <div id="dropdown" class="dropdown hidden">
-    <a href="#">Início</a>
-    <a href="#">Sobre</a>
-    <a href="#">Contato</a>
+  <div id="dropdown" class="dropdown" *ngIf="isDropdownVisible">
+    <a href="#">General</a>
+    <a href="#">Engineering</a>
+    <a href="#">Tax</a>
+    <a href="#">Production</a>
+    
   </div>
 
   <div class = "content_container">

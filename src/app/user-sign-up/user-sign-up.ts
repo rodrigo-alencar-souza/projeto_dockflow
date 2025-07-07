@@ -9,18 +9,18 @@ import { MatCardModule } from '@angular/material/card';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-
 @Component({
-  selector: 'app-sign-up',
-  standalone: true,
-  imports: [ CommonModule, MatInputModule, MatFormFieldModule, MatSelectModule, MatRadioModule, 
-    MatButtonModule, MatCardModule, FormsModule, ReactiveFormsModule
-],
-  templateUrl: './sign-up.html',
-  styleUrl: './sign-up.scss'
+  selector: 'app-user-sign-up',
+  imports: [CommonModule, MatInputModule, MatFormFieldModule, MatSelectModule, MatRadioModule, 
+    MatButtonModule, MatCardModule, FormsModule, ReactiveFormsModule],
+  templateUrl: './user-sign-up.html',
+  styleUrl: './user-sign-up.scss'
 })
 
-export class SignUp { registerForm : FormGroup;
-constructor(private fb: FormBuilder) { this.registerForm = this.fb.group({ nome: ['', Validators.required], setor: ['', Validators.required], cargo: ['', Validators.required], processo: ['', Validators.required], descricao: [''], passos: [''], sigiloso: ['nao', Validators.required] }); }
+
+export class UserSignUp { registerForm : FormGroup;
+constructor(private fb: FormBuilder) { this.registerForm = this.fb.group({ nome: ['', Validators.required], idade: ['', [Validators.required, Validators.min(0)]], setor: ['', Validators.required], cargo: ['', Validators.required], email: ['', Validators.required], senha: ['', Validators.required], confirmar_senha: ['', Validators.required] }); }
 onSubmit(): void { if (this.registerForm.valid) { console.log('Dados do formulário:', this.registerForm.value); // Aqui você pode enviar os dados para um serviço ou backend } } } 
 }}}
+
+

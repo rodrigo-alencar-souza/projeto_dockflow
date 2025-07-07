@@ -1,10 +1,15 @@
 <mat-card class="register-container">
-<h2>Cadastro de Processo</h2>
+<h2>Cadastro de Usuário</h2>
 <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
   <mat-form-field appearance="fill"><mat-label>Nome</mat-label>
     <input matInput formControlName="nome" required />
   </mat-form-field>
- 
+
+ <mat-form-field appearance="fill">
+  <mat-label>Idade</mat-label>
+  <input matInput formControlName="idade" required />
+</mat-form-field>
+
 <mat-form-field appearance="fill">
   <mat-label>Setor</mat-label>
   <input matInput formControlName="setor" required />
@@ -15,26 +20,21 @@
   <input matInput formControlName="cargo" required />
 </mat-form-field>
 
-<mat-form-field appearance="fill">
-  <mat-label>Nome do Processo</mat-label>
-  <input matInput formControlName="processo" required />
+ <mat-form-field appearance="fill">
+  <mat-label>Email</mat-label>
+  <input matInput formControlName="email" required />
 </mat-form-field>
 
 <mat-form-field appearance="fill">
-  <mat-label>Descrição do Processo</mat-label>
-  <textarea matInput formControlName="descricao" rows="3"></textarea>
+  <mat-label>Senha</mat-label>
+  <input matInput formControlName="senha" required />
 </mat-form-field>
 
 <mat-form-field appearance="fill">
-  <mat-label>Passo a Passo</mat-label>
-  <textarea matInput formControlName="passos" rows="4"></textarea>
+  <mat-label>Confirmar Senha</mat-label>
+  <input matInput formControlName="confirmar_senha" required />
 </mat-form-field>
 
-<label class="sigilo-label">Processo é sigiloso?</label>
-<mat-radio-group formControlName="sigiloso" class="sigilo-group">
-  <mat-radio-button value="sim">Sim</mat-radio-button>
-  <mat-radio-button value="nao">Não</mat-radio-button>
-</mat-radio-group>
 
 <button mat-raised-button color="primary" type="submit">Cadastrar</button>
 </form>

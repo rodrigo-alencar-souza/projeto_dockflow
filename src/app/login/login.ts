@@ -14,4 +14,8 @@ export class Login {
   Back_button_navigate(): void {
       this.router.navigate(['home']);
     }
+  
+  Register_navigate(): void {
+      this.router.navigate(['cadastro-usuario']);
+    }  
 }
