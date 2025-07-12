@@ -1,0 +1,54 @@
+@use '@angular/material' as mat;
+
+:root {
+  @include mat.card-overrides((
+    outlined-container-color: #f9f9f9,
+  ));
+}
+
+.process-card {
+  color: #222;
+  max-width: 600px;
+  width: 100%;
+  margin: 20px auto;
+  padding: 16px;
+  font-family: 'Roboto', sans-serif;
+  font-size: 1rem;
+  line-height: 1.6;
+
+  &__description {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-right: 0;
+    padding-top: 1px;
+  }
+
+  &__content {
+    text-align: justify;
+    text-justify: inter-word;
+    text-align-last: justify;
+    padding: 0 12px 12px 12px;
+
+    .process-description {
+      margin: 0;
+      padding-top: 12px;
+      border-top: 1px solid #eee;
+      text-align: justify;
+      text-justify: inter-word;
+      line-height: 1.6;
+      text-align-last: left;
+      cursor: pointer;
+    }
+  }
+}
+
+// .process-card-footer {
+//   padding: 12px;
+//   .actions {
+//     display: flex;
+//     gap: 12px;
+//     justify-content: flex-start;
+//     flex-wrap: wrap;
+//   }
+// }
