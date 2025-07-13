@@ -4,14 +4,15 @@
       <div class="bar"></div>
       <div class="bar"></div>
     </div>
-    <button class="login-button" (click)="Login_navigate()"> Login </button>
+    <button class="login-button" routerLink="/login" > Login </button>
   </header>
+  <!-- (click)="Login_navigate()" -->
 
   <div id="dropdown" class="dropdown" *ngIf="isDropdownVisible">
-    <a href="#">General</a>
-    <a href="#">Engineering</a>
-    <a href="#">Tax</a>
-    <a href="#">Production</a>
+    <a routerLink="/general">General</a>
+    <a routerLink="/engineering">Engineering</a>
+    <a routerLink="/tax">Tax</a>
+    <a routerLink="/production">Production</a>
     
   </div>
 

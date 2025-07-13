@@ -1,22 +1,19 @@
-
-  <!-- <header class="navbar">
-    <div class="menu-icon" onclick="toggleDropdown()">
-      <div class="bar"></div>
-      <div class="bar"></div>
-      <div class="bar"></div>
-    </div>
-    <a href="index.html" class="login-button">Voltar</a>
-  </header> -->
-
   <div class="back-button">
-    <button type="submit" (click) = "Back_button_navigate()">Voltar</button>
+    <button (click) = "Back_button_navigate()">Voltar</button>
   </div>
 
-  <main class="login-container">
+  <mat-card class="login-container">
     <h2>Entrar</h2>
-    <form class="login-form">
-      <input type="email" placeholder="Email" required />
-      <input type="password" placeholder="Senha" required />
+    <form class="login-form" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Email</mat-label>
+      <input matInput type="email" formControlName="email" required />
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Senha</mat-label>
+      <input matInput type="password" formControlName="password" required />
+    </mat-form-field>
       <button type="submit">Login</button>
     </form>
 
@@ -25,5 +22,5 @@
       <a (click) = "Register_navigate()"> Registre-se</a>
 
     </p>
-  </main>
+  </mat-card>
 

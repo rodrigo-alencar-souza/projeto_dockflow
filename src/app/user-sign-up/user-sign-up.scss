@@ -1,6 +1,7 @@
 .register-container { 
     max-width: 600px; 
-    margin: 4rem auto; 
+    margin: 3rem auto 2rem auto; 
+    // margin-bottom: 1rem;
     padding: 2rem; 
     background-color: #111; 
     color: #fff; 
@@ -19,7 +20,7 @@ mat-form-field {
 }
 
 input, textarea {
-  color: #fff;
+  color: #080808;
 }
 
 }
@@ -41,14 +42,26 @@ input, textarea {
 
 
 }
-button { 
+.button-subimit { 
     background-color: #e50914; 
     color: #faf8f8; 
+    font-size: 1rem;
     font-weight: bold;
+    height: 3rem;
     &:hover {
       background-color: #ff1a1a;
 }
-
+}
+.button-reset { 
+    background-color: #222222; 
+    color: #fdfdfd; 
+    font-size: 1rem;
+    font-weight: bold;
+    margin-left: 18rem;
+    height: 3rem;
+    &:hover {
+      background-color: #ff1a1a;
+}
 
 } } 
 
