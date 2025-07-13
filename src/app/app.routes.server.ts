@@ -21,17 +21,17 @@ export const serverRoutes: ServerRoute[] = [
     renderMode: RenderMode.Prerender
   },
   
-  { path: 'engineering', 
+  { path: 'engenharia', 
     renderMode: RenderMode.Server
   },
-  { path: 'production', 
+  { path: 'producao', 
     renderMode: RenderMode.Server
   },
-  { path: 'tax', 
+  { path: 'fiscal', 
     renderMode: RenderMode.Server
   },
   
-  { path: 'general', 
+  { path: 'geral', 
     renderMode: RenderMode.Server
   }
 ];
