@@ -32,11 +32,15 @@
 
 <label class="sigilo-label">Processo é sigiloso?</label>
 <mat-radio-group formControlName="sigiloso" class="sigilo-group">
-  <mat-radio-button value="sim" class="button-sigilo">Sim</mat-radio-button>
-  <mat-radio-button value="nao" class="button-sigilo">Não</mat-radio-button>
+  <mat-radio-button value="sim" class="button-sigilo">
+    <span style="color: white;" >Sim</span> 
+  </mat-radio-button>
+  <mat-radio-button value="nao" style="color: white;" class="button-sigilo">
+    <span style="color: white;" >Não</span> 
+  </mat-radio-button>
 </mat-radio-group>
 
 <button mat-raised-button color="primary" class="button-subimit" type="submit">Cadastrar</button>
-<button mat-raised-button color="primary" class="button-reset" type="reset">Cancelar</button>
+<button mat-raised-button color="primary" class="button-reset" type="reset">Limpar</button>
 </form>
 </mat-card>
