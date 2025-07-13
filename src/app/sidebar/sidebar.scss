@@ -1,33 +1,71 @@
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background-color: #000;
-  color: #fff;
+.container {
+  height: 100vh;
 }
 
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem;
-  background-color: #000;
-  border-bottom: 1px solid #222;
+.slide-out-right {
+  animation: sairPelaDireita 0.3s forwards;
 }
 
-.menu-icon {
-  display: flex;
-  flex-direction: column;
-  cursor: pointer;
+.slide-in-left {
+  animation: entrarPelaEsquerda 0.3s forwards;
 }
 
-.menu-icon .bar {
-  width: 25px;
-  height: 3px;
-  background-color: #e50914; /* vermelho Netflix */
-  margin: 4px 0;
-  transition: 0.3s;
+@keyframes sairPelaDireita {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
 }
 
+@keyframes entrarPelaEsquerda {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+
+}
+
+
+.custom-toolbar {
+  background-color: #000000; // fundo preto
+  color: #ffffff; // texto branco
+  border-bottom: 0.02rem solid #e50914;
+
+  .menu-icon,
+  .toolbar-title,
+  .login-button {
+    color: #ffffff;
+  }
+
+}
+
+
+
+.fixed-menu-icon {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  z-index: 1100;
+
+}
+
+
+// Container do botão de login alinhado à direita
+.button {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+}
+
+// Botão de login estilizado
 .login-button {
   background-color: transparent;
   border: 2px solid #e50914;
@@ -36,53 +74,102 @@ body {
   cursor: pointer;
   font-weight: bold;
   border-radius: 4px;
-  transition: background-color 0.3s;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #e50914;
+    color: #000;
+  }
 }
 
-.login-button:hover {
-  background-color: #e50914;
-  color: #000;
-}
-
-.dropdown {
-  position:absolute;
-  height: 34.93rem;
-  margin-top: auto;
-  width: 10rem;
-  max-width: 15rem;
-  // margin-right: auto;
-  // height: 86%;
-  // top: 11%;
-  // top:20px;
-  // left: 1rem;
-  background-color: #111;
-  // border: 0px 1px 0px 0px solid #e50914;
-  border-right: 0.02rem solid #e50914;
-  border-radius: 4px;
-  padding: 0.5rem 0;
-  z-index: 1000;
-}
-
-.dropdown a {
-  display: block;
-  padding: 0.5rem 1rem;
+// Conteúdo principal
+mat-sidenav-content {
+  padding: 1rem;
+  background-color: #000;
   color: #fff;
-  text-decoration: none;
+  border-radius: 0;
+
+  h2 {
+    position: relative;
+    text-align: center;
+    font-size: 1.2rem;
+  }
+}
+
+// Ícone da Sidebar (menu)
+mat-icon {
+  color: #e50914;
+}
+
+// Botão do menu
+mat-icon-button {
+  color: #e50914;
+ 
+
+  &:hover {
+    background-color: #e50914;
+    color: #000;
+  }
+}
+
+// Cabeçalho da Sidebar
+.sidenav-header {
+  padding: 1rem;
+  border-bottom: 1px solid #222;
+  background-color: #000;
+}
+
+ /* Novo estilo para garantir texto branco nos itens do Angular Material 20 */
+  .mat-mdc-list-item {
+    color: white !important;
+  }
+
+  .mat-mdc-list-item .mdc-list-item__primary-text {
+    color: white !important;
+  }
+
+// Sidebar
+mat-sidenav {
+  background-color: #000;
+  color: #fff;
+  border-right: 0.02rem solid #e50914;
+  border-radius: 0px;
+
+  
+    ::ng-deep mat-list-item .mat-line{
+    color: #f8f6f6;
+    font-weight: bold;
+
+    } 
+
+  mat-list-item {
+    color: #f8f6f6;
+    font-weight: bold;
+
+    span{
+      display:flex;
+      color: #f8f6f6;
+      font-weight: bold;
+    }
+
+    &:hover {
+      background-color: #e50914;
+      color: #000;
+    }
+
+  }
 }
 
 
 
 
-.dropdown a:hover {
-  background-color: #e50914;
-  color: #000;
-}
 
-.hidden {
-  display: none;
-}
 
-.content {
-  padding: 2rem;
-  text-align: center;
-}
+
+
+
+
+
+
+
+

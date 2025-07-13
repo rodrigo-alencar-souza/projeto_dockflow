@@ -1,27 +1,82 @@
-  <header class="navbar">
-    <div class="menu-icon" (click) = "toggleDropdown()">
-      <div class="bar"></div>
-      <div class="bar"></div>
-      <div class="bar"></div>
+<mat-toolbar color="primary" class="custom-toolbar">
+  <button mat-icon-button (click)="sidenav.toggle()" aria-label="Fechar Sidebar" class="menu-icon">
+    <mat-icon class="icon-size">menu</mat-icon>
+  </button>
+  <span class="toolbar-title">📕DockFlow</span>
+  <div class="button">
+        <button class="login-button" routerLink="/login" > Login </button>
+  </div>
+</mat-toolbar>
+
+<mat-sidenav-container class="container">
+  <mat-sidenav #sidenav mode="side" [(opened)]="sidebarAberta">
+    <mat-nav-list class="nav-list">
+      <mat-list-item >
+        <span matLine  class="text-nav" routerLink="/general"> Geral </span>
+      </mat-list-item>
+      <mat-list-item>
+        <span matLine  class="text-nav" routerLink="/engineering"> Engenharia </span>
+      </mat-list-item>  
+      <mat-list-item>
+        <span matLine  class="text-nav" routerLink="/tax"> Fiscal </span>
+      </mat-list-item>  
+      <mat-list-item>
+        <span matLine  class="text-nav" routerLink="/production"> Prudução </span>
+      </mat-list-item>  
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <div>
+      <h2>Bem Vindo ao Site</h2>
     </div>
-    <button class="login-button" routerLink="/login" > Login </button>
-  </header>
-  <!-- (click)="Login_navigate()" -->
-
-  <div id="dropdown" class="dropdown" *ngIf="isDropdownVisible">
-    <a routerLink="/general">General</a>
-    <a routerLink="/engineering">Engineering</a>
-    <a routerLink="/tax">Tax</a>
-    <a routerLink="/production">Production</a>
-    
-  </div>
-
-  <div class = "content_container">
-  <main class="content">
-    <h1>Bem-vindo ao site</h1>
-  </main>
-  </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>
 
 
 
 
+
+<!-- <mat-sidenav-container class="container">
+  <mat-sidenav #sidenav mode="side" [(opened)]="sidebarAberta">
+    <div class="sidenav-header">
+      <button mat-icon-button (click)="sidenav.toggle()" aria-label="Fechar Sidebar">
+        <mat-icon>menu</mat-icon>
+      </button>
+    </div>
+    <mat-nav-list class="nav-list">
+      <mat-list-item >
+        <span matLine  class="text-nav" routerLink="/general"> Geral </span>
+      </mat-list-item>
+      <mat-list-item>
+        <span matLine  class="text-nav" routerLink="/engineering"> Engenharia </span>
+      </mat-list-item>  
+
+      <mat-list-item>
+        <span matLine  class="text-nav" routerLink="/tax"> Fiscal </span>
+      </mat-list-item>  
+
+      <mat-list-item>
+        <span matLine  class="text-nav" routerLink="/production"> Prudução </span>
+      </mat-list-item>  
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <button *ngIf="!sidebarAberta" mat-icon-button (click)="sidenav.toggle()" aria-label="Abrir Sidebar">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <div class="button">
+        <button class="login-button" routerLink="/login" > Login </button>
+    </div>
+    <div>
+      <h2>Bem Vindo ao Site</h2>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container> -->
+
+
+<!-- <mat-list-item class="text-nav" style="color: white;" routerLink="/general" >Geral</mat-list-item>
+      <mat-list-item class="text-nav" routerLink="/engineering">Engenharia</mat-list-item>
+      <mat-list-item class="text-nav" routerLink="/tax" >Fiscal</mat-list-item>
+      <mat-list-item class="text-nav" routerLink="/production">Produção</mat-list-item> -->
