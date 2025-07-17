@@ -8,6 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card'; 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-user-sign-up',
@@ -18,8 +19,18 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 })
 
 
-export class UserSignUp { registerForm : FormGroup;
-constructor(private fb: FormBuilder) { this.registerForm = this.fb.group({ nome: ['', Validators.required], idade: ['', [Validators.required, Validators.min(0)]], setor: ['', Validators.required], cargo: ['', Validators.required], email: ['', Validators.required], senha: ['', Validators.required], confirmar_senha: ['', Validators.required] }); }
+export class UserSignUp { 
+
+Back_button_navigate(): void {
+      this.router.navigate(['home']);
+    }  
+
+setores: string[] = ["Geral", "Engenharia", "Fiscal", "Produção"]
+cargos: string[] = ["Diretor", "Gerente", "Supervisor", "Analista", "Técnico", "Estagiário"]
+
+registerForm : FormGroup;
+
+constructor(private router: Router, private fb: FormBuilder) { this.registerForm = this.fb.group({ nome: ['', Validators.required], idade: ['', [Validators.required, Validators.min(0)]], setor: ['', Validators.required], cargo: ['', Validators.required], email: ['', Validators.required], senha: ['', Validators.required], confirmar_senha: ['', Validators.required] }); }
 onSubmit(): void { if (this.registerForm.valid) { console.log('Dados do formulário:', this.registerForm.value); // Aqui você pode enviar os dados para um serviço ou backend } } } 
 }}}
 

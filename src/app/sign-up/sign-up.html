@@ -1,3 +1,7 @@
+ <div class="back-button">
+    <button (click) = "Back_button_navigate()">Voltar</button>
+  </div>
+
 <mat-card class="register-container">
 <h2>Cadastro de Processo</h2>
 <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
@@ -7,12 +11,24 @@
  
 <mat-form-field appearance="fill">
   <mat-label>Setor</mat-label>
-  <input matInput formControlName="setor" required />
+  <!-- <input matInput formControlName="setor" required /> -->
+   <mat-select formControlName="setor" required>
+      <mat-option *ngFor= "let setor of setores" [value] ="setor">
+      {{setor}}
+    </mat-option>
+    
+   </mat-select>
 </mat-form-field>
 
 <mat-form-field appearance="fill">
   <mat-label>Cargo</mat-label>
-  <input matInput formControlName="cargo" required />
+  <mat-select formControlName="cargo" required>
+      <mat-option *ngFor= "let cargo of cargos" [value] ="cargo">
+      {{cargo}}
+    </mat-option>
+    
+   </mat-select>
+  <!-- <input matInput formControlName="cargo" required /> -->
 </mat-form-field>
 
 <mat-form-field appearance="fill">

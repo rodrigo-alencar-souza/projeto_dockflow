@@ -7,11 +7,12 @@ import { Engineering } from './engineering/engineering';
 import { Tax } from './tax/tax';
 import { Production } from './production/production';
 import { General } from './general/general';
+import { Home } from './home/home';
 
 
 
 
-export const routes: Routes = [{ path: 'home', component: Sidebar },
+export const routes: Routes = [{ path: 'home', component: Home },
     { path: 'login', component: Login },
     { path: 'cadastro-usuario', component: UserSignUp},
     { path: 'cadastro-processo', component: SignUp },

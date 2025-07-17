@@ -1,6 +1,6 @@
 <mat-toolbar color="primary" class="custom-toolbar">
-  <button mat-icon-button (click)="sidenav.toggle()" aria-label="Fechar Sidebar" class="menu-icon">
-    <mat-icon class="icon-size">menu</mat-icon>
+  <button mat-icon-button class="icon_sidebar_button" (click)="sidenav.toggle()" aria-label="Fechar Sidebar" class="menu-icon">
+    <mat-icon class="icon_sidebar">menu</mat-icon>
   </button>
   <span class="toolbar-title">📕DockFlow</span>
   <div class="button">
@@ -28,7 +28,7 @@
 
   <mat-sidenav-content>
     <div>
-      <h2>Bem Vindo ao Site</h2>
+      <ng-content></ng-content>
     </div>
   </mat-sidenav-content>
 </mat-sidenav-container>
