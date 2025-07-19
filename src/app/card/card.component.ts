@@ -2,9 +2,10 @@ import { Component, Input } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatListModule } from '@angular/material/list';
 import { MatChipsModule } from '@angular/material/chips';
-import {MatMenuModule} from '@angular/material/menu';
+import { MatMenuModule } from '@angular/material/menu';
 import { MatIcon } from '@angular/material/icon';
-import {MatIconModule} from '@angular/material/icon';
+import { MatIconModule } from '@angular/material/icon';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-card',
@@ -15,4 +16,6 @@ import {MatIconModule} from '@angular/material/icon';
 })
 export class CardComponent {
   @Input() data: any;
+
+  
 }

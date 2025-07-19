@@ -76,6 +76,13 @@ html {
   }
 }
 
+.card-grid {
+  display: flex;
+  gap: 30px; /* espaço entre os cards */
+  flex-wrap: wrap;
+  justify-content: center; /* centraliza os cards horizontalmente */
+}
+
 // .process-card-footer {
 //   padding: 12px;
 //   .actions {
