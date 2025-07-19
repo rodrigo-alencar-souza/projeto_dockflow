@@ -35,9 +35,9 @@
 
 
 .custom-toolbar {
-  background-color: #000000; // fundo preto
+  background-color: #16161d; // fundo preto
   color: #ffffff; // texto branco
-  border-bottom: 0.02rem solid #e50914;
+  border-bottom: 0.02rem solid #a50034;
 
   .menu-icon,
   .toolbar-title,
@@ -68,7 +68,7 @@
 // Botão de login estilizado
 .login-button {
   background-color: transparent;
-  border: 2px solid #e50914;
+  border: 2px solid #a50034;
   color: #f7f3f3;
   padding: 0.5rem 1rem;
   cursor: pointer;
@@ -77,15 +77,15 @@
   transition: background-color 0.3s ease;
 
   &:hover {
-    background-color: #e50914;
-    color: #000;
+    background-color: #a50034;
+    color: #16161d;
   }
 }
 
 // Conteúdo principal
 mat-sidenav-content {
   padding: 1rem;
-  background-color: #000;
+  background-color: #16161d;
   color: #fff;
   border-radius: 0;
 
@@ -100,17 +100,17 @@ mat-sidenav-content {
 
 // Ícone da Sidebar (menu)
 mat-icon {
-  color: #e50914;
+  color: #a50034;
 }
 
 // Botão do menu
 mat-icon-button {
-  color: #e50914;
+  color: #a50034;
  
 
   &:hover {
-    background-color: #e50914;
-    color: #000;
+    background-color: #a50034;
+    color: #16161d;
   }
 }
 
@@ -118,7 +118,7 @@ mat-icon-button {
 .sidenav-header {
   padding: 1rem;
   border-bottom: 1px solid #222;
-  background-color: #000;
+  background-color: #16161d;
 }
 
  /* Novo estilo para garantir texto branco nos itens do Angular Material 20 */
@@ -132,9 +132,9 @@ mat-icon-button {
 
 // Sidebar
 mat-sidenav {
-  background-color: #000;
+  background-color: #16161d;
   color: #fff;
-  border-right: 0.02rem solid #e50914;
+  border-right: 0.02rem solid #a50034;
   border-radius: 0px;
 
   
@@ -155,8 +155,8 @@ mat-sidenav {
     }
 
     &:hover {
-      background-color: #e50914;
-      color: #000;
+      background-color: #a50034;
+      color: #16161d;
     }
 
   }

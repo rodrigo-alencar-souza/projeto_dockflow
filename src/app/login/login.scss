@@ -1,5 +1,5 @@
 .back-button button {
-  background-color: #e50914;
+  background-color: #a50034;
   color: #fdfcfc;
   position: relative;
   margin-top: 10px;
@@ -16,8 +16,8 @@
   max-width: 400px;
   margin: 5rem auto;
   padding: 2rem;
-  background-color: #111;
-  border: 1px solid #e50914;
+  background-color: #222;
+  border: 1px solid #a50034;
   border-radius: 8px;
   text-align: center;
 
@@ -34,7 +34,7 @@
 
 mat-form-field { 
    .mat-form-field-infix {
-      background-color: #c91313;
+      background-color: #b10e0e;
       color: #faf2f2;
 }
 
@@ -59,7 +59,7 @@ mat-form-field {
 // }
 
 .login-form button {
-  background-color: #e50914;
+  background-color: #a50034;
   color: #f8f8f8;
   padding: 0.75rem;
   border: none;
@@ -70,14 +70,14 @@ mat-form-field {
 }
 
 .login-form button:hover {
-  background-color: #ff1a1a;
+  background-color: #b10e0e;
 }
 
 .register-text{
   margin-top: 1rem;
   color: #ccc;
   a {
-    color: #ff1a1a;
+    color: #b10e0e;
     text-decoration: none;
     &:hover{
       text-decoration: underline;
