@@ -10,8 +10,16 @@ html {
   ));
 }
 
+.card-grid {
+  display:flex;
+  flex-direction: row; 
+  gap: 0.3rem; /* espaço entre os cards */
+  flex-wrap: wrap;
+  justify-content: center; /* centraliza os cards horizontalmente */
+}
+
 // ::ng-deep button[mat-icon-button]
-.button_menu
+.button_menu, .menu
 {
   background-color: #2a2a2a; // fundo escuro discreto
   color: #e0e0e0; // cor do ícone
@@ -39,14 +47,24 @@ html {
 .process-card {
   background-color: #1e1e1e; // cor de fundo escura
   color: #f0f0f0;
-  max-width: 450px;
+  max-width: 20rem;
+  max-height: 20rem;
+  height: auto;
   width: 100%;
-  margin: 20px auto;
+  margin: 4rem 2rem;
   padding: 16px;
   font-family: 'Roboto', sans-serif;
   font-size: 1rem;
   line-height: 1.6;
   border: none;
+  box-sizing: border-box;
+  overflow: hidden;       // esconde o conteúdo que ultrapassa
+  text-overflow: ellipsis; // adiciona "..." se o texto for cortado
+  // white-space: nowrap;     // impede quebra de linha
+  word-break: break-word;    // força quebra se necessário
+  white-space: normal;       // permite várias linhas
+
+
 
 
   &__description {
@@ -55,6 +73,10 @@ html {
     align-items: center;
     padding-right: 0;
     padding-top: 1px;
+
+    mat-card-subtitle {
+      color: white;
+    }
   }
 
   &__content {
@@ -76,11 +98,20 @@ html {
   }
 }
 
-.card-grid {
-  display: flex;
-  gap: 30px; /* espaço entre os cards */
-  flex-wrap: wrap;
-  justify-content: center; /* centraliza os cards horizontalmente */
+.add-button button {
+  background-color: #a50034;
+  color: #fdfcfc;
+  position: relative;
+  display:flex;
+  margin-top: 1rem;
+  margin-left: auto;
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
 }
 
 // .process-card-footer {

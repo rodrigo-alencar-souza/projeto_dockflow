@@ -14,8 +14,5 @@ export class Engineering {
 
   constructor(private router: Router){}
 
-  Process_button_navigate(): void {
-        this.router.navigate(['cadastro-processo']);
-      }
 
 }
