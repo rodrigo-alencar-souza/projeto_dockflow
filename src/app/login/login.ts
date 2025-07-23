@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
 import { MatInputModule } from '@angular/material/input'; 
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select'; 
@@ -8,7 +7,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card'; 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-
+import { AuthService } from '../service/auth.service';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -22,10 +22,9 @@ export class Login {
 
   loginForm : FormGroup;
 
-
-  constructor(private router: Router, private fb: FormBuilder )
+  constructor(private router: Router, private fb: FormBuilder, private auth: AuthService)
   {this.loginForm = this.fb.group({ email: ['', Validators.required], password: ['', Validators.required]})}
-
+  
   Back_button_navigate(): void {
       this.router.navigate(['home']);
     }
@@ -34,5 +33,16 @@ export class Login {
       this.router.navigate(['cadastro-usuario']);
     }  
 
-  onSubmit(): void { if (this.loginForm.valid) { console.log('Dados do formulário:', this.loginForm.value)}}; // Aqui você pode enviar os dados para um serviço ou backend } } }   
+  onSubmit(): void {
+  if (this.loginForm.valid) {
+    const { email, password } = this.loginForm.value;
+
+    if (this.auth.login(email, password)) {
+      const setor = this.auth.getSetor();
+      this.router.navigate([`/${setor}`]);
+    } else {
+      alert('Credenciais inválidas');
+    }
+  }
+}   
 }

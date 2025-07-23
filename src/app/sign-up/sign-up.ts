@@ -9,7 +9,7 @@ import { MatCardModule } from '@angular/material/card';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { ProcessoService } from '../service/process.service';
+import { ProcessoService } from '../service/processo.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 

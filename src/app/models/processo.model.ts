@@ -4,6 +4,6 @@ export interface Processo {
   cargo: string;
   processo: string;
   descricao: string;
-  passos: string;
-  sigiloso: string;
+  passos: string[];
+  sigiloso: boolean;
 }

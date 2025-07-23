@@ -1,23 +1,12 @@
-<h2 mat-dialog-title>Detalhes do Processo</h2>
-
-<mat-dialog-content>
-  <div id="a4-content" class="a4-paper">
-    <h3>{{ data.processo }}</h3>
-    <p><strong>Setor:</strong> {{ data.setor }}</p>
-    <p><strong>Responsável:</strong> {{ data.nome }} ({{ data.cargo }})</p>
-    <p><strong>Descrição:</strong></p>
-    <p>{{ data.descricao }}</p>
-    <p><strong>Passo a Passo:</strong></p>
-    <ol>
-      <li *ngFor="let passo of data.passos.split('\n')">{{ passo }}</li>
-    </ol>
-    <p><strong>Sigiloso:</strong> {{ data.sigiloso }}</p>
-  </div>
-</mat-dialog-content>
-
-<mat-dialog-actions>
-  <button mat-button (click)="fechar()">Fechar</button>
-  <button mat-raised-button color="primary" (click)="exportarPDF()">
-    Exportar para PDF
-  </button>
-</mat-dialog-actions>
+<mat-card *ngIf="processo">
+  <mat-card-title>{{ processo.processo }}</mat-card-title>
+  <mat-card-subtitle>{{ processo.setor }} — {{ processo.cargo }}</mat-card-subtitle>
+  <mat-card-content>
+    <p><strong>Descrição:</strong> {{ processo.descricao }}</p>
+    <p><strong>Passos:</strong></p>
+    <ul>
+      <li *ngFor="let passo of processo.passos">{{ passo }}</li>
+    </ul>
+    <p><strong>Sigiloso:</strong> {{ processo.sigiloso ? 'Sim' : 'Não' }}</p>
+  </mat-card-content>
+</mat-card>
