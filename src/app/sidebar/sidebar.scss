@@ -1,0 +1,177 @@
+.container {
+  height: 100vh;
+}
+
+.slide-out-right {
+  animation: sairPelaDireita 0.3s forwards;
+}
+
+.slide-in-left {
+  animation: entrarPelaEsquerda 0.3s forwards;
+}
+
+@keyframes sairPelaDireita {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+@keyframes entrarPelaEsquerda {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+
+}
+
+
+.custom-toolbar {
+  background-color: #16161d; // fundo preto
+  color: #ffffff; // texto branco
+  border-bottom: 0.02rem solid #a50034;
+
+  .menu-icon,
+  .toolbar-title,
+  .login-button {
+    color: #ffffff;
+  }
+
+}
+
+
+
+.fixed-menu-icon {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  z-index: 1100;
+
+}
+
+
+// Container do botão de login alinhado à direita
+.button {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+}
+
+// Botão de login estilizado
+.login-button {
+  background-color: transparent;
+  border: 2px solid #a50034;
+  color: #f7f3f3;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  font-weight: bold;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #a50034;
+    color: #16161d;
+  }
+}
+
+// Conteúdo principal
+mat-sidenav-content {
+  padding: 1rem;
+  background-color: #16161d;
+  color: #fff;
+  border-radius: 0;
+
+  h2 {
+    position: relative;
+    text-align: center;
+    font-size: 1.2rem;
+  }
+}
+
+
+
+// Ícone da Sidebar (menu)
+mat-icon {
+  color: #a50034;
+}
+
+// Botão do menu
+mat-icon-button {
+  color: #a50034;
+ 
+
+  &:hover {
+    background-color: #a50034;
+    color: #16161d;
+  }
+}
+
+// Cabeçalho da Sidebar
+.sidenav-header {
+  padding: 1rem;
+  border-bottom: 1px solid #222;
+  background-color: #16161d;
+}
+
+ /* Novo estilo para garantir texto branco nos itens do Angular Material 20 */
+  .mat-mdc-list-item {
+    color: white !important;
+  }
+
+  .mat-mdc-list-item .mdc-list-item__primary-text {
+    color: white !important;
+  }
+
+// Sidebar
+mat-sidenav {
+  background-color: #16161d;
+  color: #fff;
+  border-right: 0.02rem solid #a50034;
+  border-radius: 0px;
+
+  
+    ::ng-deep mat-list-item .mat-line{
+    color: #f8f6f6;
+    font-weight: bold;
+
+    } 
+
+  mat-list-item {
+    color: #f8f6f6;
+    font-weight: bold;
+
+    span{
+      display:flex;
+      color: #f8f6f6;
+      font-weight: bold;
+    }
+
+    &:hover {
+      background-color: #a50034;
+      color: #16161d;
+    }
+
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

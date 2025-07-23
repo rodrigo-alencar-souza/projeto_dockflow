@@ -1,0 +1,16 @@
+.a4-paper {
+  width: 210mm;
+  min-height: 297mm;
+  padding: 20mm;
+  background: white;
+  box-shadow: 0 0 5px rgba(0,0,0,0.1);
+  font-family: Roboto, sans-serif;
+  color: #333;
+}
+
+@media print {
+  .a4-paper {
+    box-shadow: none;
+    margin: 0;
+  }
+}

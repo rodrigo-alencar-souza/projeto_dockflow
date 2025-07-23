@@ -1,0 +1,23 @@
+<h2 mat-dialog-title>Detalhes do Processo</h2>
+
+<mat-dialog-content>
+  <div id="a4-content" class="a4-paper">
+    <h3>{{ data.processo }}</h3>
+    <p><strong>Setor:</strong> {{ data.setor }}</p>
+    <p><strong>Responsável:</strong> {{ data.nome }} ({{ data.cargo }})</p>
+    <p><strong>Descrição:</strong></p>
+    <p>{{ data.descricao }}</p>
+    <p><strong>Passo a Passo:</strong></p>
+    <ol>
+      <li *ngFor="let passo of data.passos.split('\n')">{{ passo }}</li>
+    </ol>
+    <p><strong>Sigiloso:</strong> {{ data.sigiloso }}</p>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button mat-button (click)="fechar()">Fechar</button>
+  <button mat-raised-button color="primary" (click)="exportarPDF()">
+    Exportar para PDF
+  </button>
+</mat-dialog-actions>
