@@ -37,10 +37,13 @@ export class ProcessoService {
   ]);
 
   processos$ = this.processosSubject.asObservable();
+
   private processoSelecionado: Processo | null = null;
+  private indiceEdicao: number | null = null;
 
   constructor(private auth: AuthService) {}
 
+  // 🔍 Lista de processos visíveis para o setor atual
   getProcessosVisiveis(): Processo[] {
     const setorLogado = this.auth.getSetor();
     return this.processosSubject.value.filter(
@@ -48,12 +51,14 @@ export class ProcessoService {
     );
   }
 
+  // 🗑️ Remoção de processo por índice
   removerProcesso(index: number): void {
     const processos = [...this.processosSubject.value];
     processos.splice(index, 1);
     this.processosSubject.next(processos);
   }
 
+  // 🧠 Processos selecionados para visualização ou edição
   setProcessoSelecionado(processo: Processo): void {
     this.processoSelecionado = processo;
   }
@@ -62,20 +67,30 @@ export class ProcessoService {
     return this.processoSelecionado;
   }
 
-  adicionarProcesso(novoProcesso: Processo): void {
-  const processos = this.processosSubject.value;
-  this.processosSubject.next([...processos, novoProcesso]);
+  // ✏️ Index de edição (usado no sign-up)
+  setIndiceEdicao(index: number | null): void {
+    this.indiceEdicao = index;
   }
 
+  getIndiceEdicao(): number | null {
+    return this.indiceEdicao;
+  }
+
+  // 📥 Acesso por índice (reutilizado na edição)
+  getProcessoPorIndice(index: number): Processo | null {
+    return this.processosSubject.value[index] || null;
+  }
+
+  // 🔄 Atualizar processo existente
   atualizarProcesso(index: number, processoAtualizado: Processo): void {
     const processos = [...this.processosSubject.value];
     processos[index] = processoAtualizado;
     this.processosSubject.next(processos);
   }
 
-  getProcessoPorIndice(index: number): Processo | null {
+  // ➕ Adicionar novo processo
+  adicionarProcesso(novoProcesso: Processo): void {
     const processos = this.processosSubject.value;
-    return processos[index] || null;
+    this.processosSubject.next([...processos, novoProcesso]);
   }
-
 }

@@ -1,3 +1,4 @@
+
 // import { Component, Inject } from '@angular/core';
 // import { MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
 // import { CommonModule } from '@angular/common';
@@ -38,10 +39,39 @@
 //   }
 // }
 
+// import { Component, Inject } from '@angular/core';
+// import { MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
+// import { CommonModule } from '@angular/common';
+// import { Processo } from '../models/processo.model';// import { MatCardModule } from '@angular/material/card';
+
+// @Component({
+//   selector: 'app-processo-detail',
+//   standalone: true,
+//   imports: [CommonModule, MatDialogModule, MatCardModule],
+//   templateUrl: './detail.process.html',
+//   styleUrls: ['./detail.process.scss']
+// })
+// export class ProcessoDetailComponent {
+//   processo: Processo;
+
+//   constructor(
+//     private dialogRef: MatDialogRef<ProcessoDetailComponent>,
+//     @Inject(MAT_DIALOG_DATA) public data: Processo
+//   ) {
+//     this.processo = data;
+//   }
+
+//   fechar(): void {
+//     this.dialogRef.close();
+//   }
+// }
+
+
+
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
-import { CommonModule } from '@angular/common';
 import { Processo } from '../models/processo.model';
+import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 
 @Component({
@@ -52,14 +82,10 @@ import { MatCardModule } from '@angular/material/card';
   styleUrls: ['./detail.process.scss']
 })
 export class ProcessoDetailComponent {
-  processo: Processo;
-
   constructor(
     private dialogRef: MatDialogRef<ProcessoDetailComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: Processo
-  ) {
-    this.processo = data;
-  }
+    @Inject(MAT_DIALOG_DATA) public processo: Processo
+  ) {}
 
   fechar(): void {
     this.dialogRef.close();

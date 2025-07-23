@@ -1,8 +1,9 @@
-// src/app/card/card.component.ts
 import { Component, OnInit } from '@angular/core';
 import { ProcessoService } from '../service/processo.service';
 import { Processo } from '../models/processo.model';
 import { Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { ProcessoDetailComponent } from '../detail.process/detail.process';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -27,7 +28,8 @@ export class CardComponent implements OnInit {
 
   constructor(
     private processoService: ProcessoService,
-    private router: Router
+    private router: Router,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -39,14 +41,15 @@ export class CardComponent implements OnInit {
   }
 
   abrirDetalhes(processo: Processo): void {
-    this.processoService.setProcessoSelecionado(processo);
-    this.router.navigate(['/detail-process']);
+    this.dialog.open(ProcessoDetailComponent, {
+      width: '800px',
+      data: processo
+    });
   }
 
   editarProcesso(index: number): void {
-    const processo = this.processosPorSetor[index];
-    this.processoService.setProcessoSelecionado(processo);
-    this.router.navigate(['/editar-processo']);
+    this.processoService.setIndiceEdicao(index);
+    this.router.navigate(['/sign-up']);
   }
 
   excluirProcesso(index: number): void {
@@ -55,6 +58,7 @@ export class CardComponent implements OnInit {
   }
 
   Process_button_navigate(): void {
-    console.log('Navegar para adicionar processo');
+    this.processoService.setIndiceEdicao(null);
+    this.router.navigate(['/sign-up']);
   }
 }
