@@ -11,6 +11,7 @@ import { Processo } from '../models/processo.model';
 import { ProcessoService } from '../service/process.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ProcessoDetailComponent } from '../detail.process/detail.process';
+import { SignUp } from '../sign-up/sign-up';
 
 
 
@@ -39,15 +40,32 @@ export class CardComponent {
     });
   }
 
-  editarProcesso(index: number, processo: Processo): void {
-    // abrir um diálogo de edição, ou navegar para o formulário com os dados preenchidos
-    // Aqui simplificamos com um prompt
-    const novoTitulo = prompt('Novo nome do processo:', processo.processo);
-    if (novoTitulo !== null) {
-      const processoEditado = { ...processo, processo: novoTitulo };
-      this.processoService.atualizarProcesso(index, processoEditado);
-    }
-  }
+  // editarProcesso(index: number, processo: Processo): void {
+  //   // abrir um diálogo de edição, ou navegar para o formulário com os dados preenchidos
+  //   // Aqui simplificamos com um prompt
+  //   const novoTitulo = prompt('Novo nome do processo:', processo.processo);
+  //   if (novoTitulo !== null) {
+  //     const processoEditado = { ...processo, processo: novoTitulo };
+  //     this.processoService.atualizarProcesso(index, processoEditado);
+  //   }
+  // }
+
+//   editarProcesso(index: number, processo: Processo): void {
+//   const dialogRef = this.dialog.open(SignUp, {
+//     width: '600px',
+//     data: { processoEditado: processo, indexEdicao: index },
+//   });
+
+//   dialogRef.componentInstance.atualizarProcesso.subscribe(({ processo, index }) => {
+//     this.processoService.atualizarProcesso(index, processo);
+//   });
+// }
+
+  editarProcesso(index: number): void {
+  this.router.navigate(['/editar-processo', index]);
+}
+
+
 
   excluirProcesso(index: number): void {
     const confirmacao = confirm('Tem certeza que deseja excluir este processo?');

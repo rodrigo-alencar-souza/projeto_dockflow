@@ -22,6 +22,12 @@ export class ProcessoService {
   this.processosSubject.next(processos);
 }
 
+getProcessoPorIndice(index: number): Processo | null {
+  const processos = this.processosSubject.value;
+  return processos[index] || null;
+}
+
+
 removerProcesso(index: number): void {
   const processos = [...this.processosSubject.value];
   processos.splice(index, 1);
