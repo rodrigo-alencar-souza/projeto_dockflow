@@ -3,20 +3,20 @@
   </div>
 
 <div class="card-grid">
-<mat-card *ngFor="let processo of processosPorSetor; let i = index" class="process-card" appearance="outlined">
+<mat-card *ngFor="let processo of processosPorSetor; let i = index" class="process-card" appearance="outlined" (click)="abrirDetalhes(processo)">
   <mat-card-header class="process-card__description">
     <mat-card-title>{{ processo.processo }}</mat-card-title>
     <mat-card-subtitle>{{ processo.setor }}</mat-card-subtitle>
-    <button class="button_menu" mat-icon-button [matMenuTriggerFor]="menu">
+    <button (click) = "isActive" class="button_menu" mat-icon-button [matMenuTriggerFor]="menu">
       <mat-icon>more_vert</mat-icon>
     </button>
-    <mat-menu #menu="matMenu">
-      <button mat-menu-item (click)="editarProcesso(i, processo)">
-        <mat-icon>edit</mat-icon>
+    <mat-menu panelClass="custom-menu-panel" #menu="matMenu">
+      <button mat-menu-item class = "pop_up" (click)="editarProcesso(i, processo)">
+        <mat-icon class="icon_pop_up">edit</mat-icon>
         <span>Editar</span>
       </button>
-      <button mat-menu-item (click)="excluirProcesso(i)">
-        <mat-icon>delete</mat-icon>
+      <button mat-menu-item class = "pop_up" (click)="excluirProcesso(i)">
+        <mat-icon class="icon_pop_up" >delete</mat-icon>
         <span>Excluir</span>
       </button>
     </mat-menu>

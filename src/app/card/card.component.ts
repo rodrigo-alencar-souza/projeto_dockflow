@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
 import { Processo } from '../models/processo.model';
 import { ProcessoService } from '../service/process.service';
 import { MatDialog } from '@angular/material/dialog';
+import { ProcessoDetailComponent } from '../detail.process/detail.process';
 
 
 
@@ -23,6 +24,8 @@ import { MatDialog } from '@angular/material/dialog';
 export class CardComponent {
  @Input() setor: string = '';
   processosPorSetor: Processo[] = [];
+  
+  isActive = false;
 
   constructor(private processoService: ProcessoService, private dialog: MatDialog, private router: Router) {}
 
@@ -52,6 +55,13 @@ export class CardComponent {
       this.processoService.removerProcesso(index);
     }
   }
+
+  abrirDetalhes(processo: Processo): void {
+  this.dialog.open(ProcessoDetailComponent, {
+    width: '230mm',      // para caber o conteúdo A4
+    data: processo
+  });
+}
 
 
 }
