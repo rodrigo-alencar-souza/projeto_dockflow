@@ -19,9 +19,9 @@ html {
 }
 
 // ::ng-deep button[mat-icon-button]
-.button_menu, .menu
+.button_menu
 {
-  background-color: #2a2a2a; // fundo escuro discreto
+  background-color: rgb(71, 73, 71); // fundo escuro discreto
   color: #e0e0e0; // cor do ícone
   border-radius: 8px; // cantos arredondados
   transition: background-color 0.2s ease, color 0.2s ease;
@@ -30,7 +30,7 @@ html {
 
 
   &:hover {
-    background-color: #3c3c3c; // escurece um pouco no hover
+    background-color: rgb(58, 59, 59); // escurece um pouco no hover
   }
 
   mat-icon {
@@ -40,16 +40,41 @@ html {
   &:hover mat-icon {
     color: #ffffff; // ícone clareia no hover
   }
+
+}
+
+::ng-deep .mat-mdc-menu-content{
+  background-color: rgb(71, 73, 71);
+
+}
+
+
+.pop_up{
+
+  background-color: rgb(71, 73, 71); // fundo escuro discreto
+  color: #e0e0e0; // cor do ícone
+
+  &:hover {
+    color: #e0e0e0;
+    background-color:#222222;// ícone clareia no hover
+  }
+
+  .icon_pop_up{
+    color: #e0e0e0; // cor do ícone
+
+  }
+
 }
 
 
 
+
 .process-card {
-  background-color: #1e1e1e; // cor de fundo escura
+  background-color: #333; // cor de fundo escura
   color: #f0f0f0;
-  max-width: 20rem;
-  max-height: 20rem;
-  height: auto;
+  max-width: 23rem;
+  max-height: 12rem;
+  height: 12rem;
   width: 100%;
   margin: 4rem 2rem;
   padding: 16px;
@@ -65,8 +90,6 @@ html {
   white-space: normal;       // permite várias linhas
 
 
-
-
   &__description {
     display: flex;
     justify-content: space-between;
@@ -79,12 +102,16 @@ html {
     }
   }
 
+
+
   &__content {
     text-align: justify;
     text-justify: inter-word;
     text-align-last: justify;
     padding: 0 12px 12px 12px;
 
+
+    
     .process-description {
       margin: 0;
       padding-top: 12px;
