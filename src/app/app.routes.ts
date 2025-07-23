@@ -17,6 +17,7 @@ import { ProcessoDetailComponent } from './detail.process/detail.process';
 export const routes: Routes = [
     { path: 'detail-process', component: ProcessoDetailComponent, canActivate: [setorGuard], data: { setor: 'geral' }},
     { path: 'home', component: Home },
+    { path: 'sign-up', component: SignUp, canActivate: [setorGuard], data: { setor: 'geral' }},
     { path: 'login', component: Login },
     { path: 'cadastro-usuario', component: UserSignUp},
     { path: 'cadastro-processo', component: SignUp },

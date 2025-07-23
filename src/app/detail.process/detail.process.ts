@@ -81,6 +81,7 @@ import { MatCardModule } from '@angular/material/card';
   templateUrl: './detail.process.html',
   styleUrls: ['./detail.process.scss']
 })
+
 export class ProcessoDetailComponent {
   constructor(
     private dialogRef: MatDialogRef<ProcessoDetailComponent>,

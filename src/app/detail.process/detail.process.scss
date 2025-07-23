@@ -8,6 +8,13 @@
   color: #333;
 }
 
+mat-card {
+  max-height: 80vh;
+  overflow-y: auto;
+  padding: 16px;
+}
+
+
 @media print {
   .a4-paper {
     box-shadow: none;

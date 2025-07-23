@@ -61,4 +61,5 @@ export class CardComponent implements OnInit {
     this.processoService.setIndiceEdicao(null);
     this.router.navigate(['/sign-up']);
   }
+
 }
