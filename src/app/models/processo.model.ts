@@ -1,4 +1,5 @@
 export interface Processo {
+  id: number | string;
   nome: string;
   setor: string;
   cargo: string;
