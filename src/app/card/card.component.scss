@@ -73,8 +73,8 @@ html {
   background-color: #333; // cor de fundo escura
   color: #f0f0f0;
   max-width: 23rem;
-  max-height: 12rem;
-  height: 12rem;
+  max-height: 11rem;
+  height: 11rem;
   width: 100%;
   margin: 4rem 2rem;
   padding: 16px;
@@ -83,11 +83,8 @@ html {
   line-height: 1.6;
   border: none;
   box-sizing: border-box;
-  overflow: hidden;       // esconde o conteúdo que ultrapassa
-  text-overflow: ellipsis; // adiciona "..." se o texto for cortado
-  // white-space: nowrap;     // impede quebra de linha
-  word-break: break-word;    // força quebra se necessário
-  white-space: normal;       // permite várias linhas
+  
+  
 
 
   &__description {
@@ -96,9 +93,11 @@ html {
     align-items: center;
     padding-right: 0;
     padding-top: 1px;
+    cursor: pointer;
 
     mat-card-subtitle {
       color: white;
+      cursor: pointer;
     }
   }
 
@@ -109,19 +108,34 @@ html {
     text-justify: inter-word;
     text-align-last: justify;
     padding: 0 12px 12px 12px;
+    
 
 
     
+    // .process-description {
+    //   margin: 0;
+    //   padding-top: 12px;
+    //   // border-top: 1px solid #eee;
+    //   text-align: justify;
+    //   text-justify: inter-word;
+    //   line-height: 1.6;
+    //   text-align-last: left;
+    //   cursor: pointer;
+    // }
+
+
     .process-description {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: block;
+      width: 100%;
       margin: 0;
       padding-top: 12px;
-      // border-top: 1px solid #eee;
-      text-align: justify;
-      text-justify: inter-word;
-      line-height: 1.6;
-      text-align-last: left;
       cursor: pointer;
+
     }
+
   }
 }
 
@@ -150,3 +164,7 @@ html {
 //     flex-wrap: wrap;
 //   }
 // }
+
+
+
+

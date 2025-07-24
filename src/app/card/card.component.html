@@ -7,7 +7,7 @@
   <mat-card-header class="process-card__description">
     <mat-card-title>{{ processo.processo }}</mat-card-title>
     <mat-card-subtitle>{{ processo.setor }}</mat-card-subtitle>
-    <button (click) = "isActive" class="button_menu" mat-icon-button [matMenuTriggerFor]="menu">
+    <button (click)="$event.stopPropagation();" class="button_menu" mat-icon-button [matMenuTriggerFor]="menu">
       <mat-icon>more_vert</mat-icon>
     </button>
     <mat-menu panelClass="custom-menu-panel" #menu="matMenu">

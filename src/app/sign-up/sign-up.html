@@ -5,7 +5,7 @@
 <mat-card class="register-container">
 <h2>{{ modoEdicao ? 'Edição de Processo' : 'Cadastro de Processo' }}</h2>
 <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
-  <mat-form-field appearance="fill"><mat-label>Nome</mat-label>
+  <mat-form-field appearance="fill"><mat-label>Nome (Colaborador)</mat-label>
     <input matInput formControlName="nome" required />
   </mat-form-field>
  
@@ -38,7 +38,7 @@
 
 <mat-form-field appearance="fill">
   <mat-label>Descrição do Processo</mat-label>
-  <textarea matInput formControlName="descricao" rows="3"></textarea>
+  <textarea matInput formControlName="descricao" rows="3" required></textarea>
 </mat-form-field>
 
 <mat-form-field appearance="fill">

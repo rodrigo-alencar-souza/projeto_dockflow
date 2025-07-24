@@ -1,6 +1,9 @@
 .a4-paper {
   width: 210mm;
   min-height: 297mm;
+  text-size-adjust: 190mm;
+  text-align: justify;
+  box-sizing: border-box;
   padding: 20mm;
   background: white;
   box-shadow: 0 0 5px rgba(0,0,0,0.1);
@@ -14,3 +17,17 @@
     margin: 0;
   }
 }
+
+.button-dialog{
+  background-color: #a50034;
+  color: #fdfcfc;
+  margin-left: 0.5rem;
+  padding: 0.5rem;
+  border: none;
+  border-radius: 0.5rem;
+  font-weight: bold;
+  cursor: pointer;
+  
+}
+
+
