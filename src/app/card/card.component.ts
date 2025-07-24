@@ -21,7 +21,7 @@ import { MatIconModule } from '@angular/material/icon';
     MatIconModule
   ],
   templateUrl: './card.component.html',
-  styleUrl: './card.component.scss'
+  styleUrls: ['./card.component.scss']
 })
 export class CardComponent implements OnInit {
   processosPorSetor: Processo[] = [];
@@ -33,8 +33,11 @@ export class CardComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.atualizarLista();
+    this.processoService.processos$.subscribe(() => {
+      this.atualizarLista();
+    });
   }
+
 
   atualizarLista(): void {
     this.processosPorSetor = this.processoService.getProcessosVisiveis();
@@ -48,9 +51,12 @@ export class CardComponent implements OnInit {
   }
 
   editarProcesso(index: number): void {
-    this.processoService.setIndiceEdicao(index);
+    const processoVisivel = this.processosPorSetor[index];
+    const indexGlobal = this.processoService.getIndiceGlobal(processoVisivel);
+    this.processoService.setIndiceEdicao(indexGlobal);
     this.router.navigate(['/sign-up']);
   }
+
 
   excluirProcesso(index: number): void {
     this.processoService.removerProcesso(index);
@@ -61,5 +67,4 @@ export class CardComponent implements OnInit {
     this.processoService.setIndiceEdicao(null);
     this.router.navigate(['/sign-up']);
   }
-
 }

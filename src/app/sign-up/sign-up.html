@@ -9,15 +9,18 @@
     <input matInput formControlName="nome" required />
   </mat-form-field>
  
-<mat-form-field appearance="fill">
+<!-- <mat-form-field appearance="fill">
   <mat-label>Setor</mat-label>
-  <!-- <input matInput formControlName="setor" required /> -->
    <mat-select formControlName="setor" required>
       <mat-option *ngFor= "let setor of setores" [value] ="setor">
       {{setor}}
     </mat-option>
-    
    </mat-select>
+</mat-form-field> -->
+
+<mat-form-field>
+  <mat-label>Setor</mat-label>
+  <input matInput formControlName="setor" [disabled]="indexEdicao !== null" />
 </mat-form-field>
 
 <mat-form-field appearance="fill">

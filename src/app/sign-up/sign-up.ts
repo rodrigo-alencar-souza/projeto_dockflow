@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
 import { ProcessoService } from '../service/processo.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Processo } from '../models/processo.model';
+import { AuthService } from '../service/auth.service';
 
 @Component({
   selector: 'app-sign-up',
@@ -38,6 +39,7 @@ export class SignUp implements OnInit {
   constructor(
     private snackBar: MatSnackBar,
     private processoService: ProcessoService,
+    private auth: AuthService,
     private router: Router,
     private fb: FormBuilder
   ) {}
@@ -54,34 +56,47 @@ export class SignUp implements OnInit {
     });
 
     this.indexEdicao = this.processoService.getIndiceEdicao();
+
     if (this.indexEdicao !== null) {
       const processo = this.processoService.getProcessoPorIndice(this.indexEdicao);
       if (processo) {
         this.registerForm.patchValue({
           nome: processo.nome,
-          setor: processo.setor,
+          setor: processo.setor, // mantém o setor original
           cargo: processo.cargo,
           processo: processo.processo,
           descricao: processo.descricao,
           passos: processo.passos.join('\n'),
-          sigiloso: processo.sigiloso
+          sigiloso: processo.sigiloso ? 'sim' : 'nao'
         });
       }
+    } else {
+      // preenche setor automaticamente no cadastro
+      const setorLogado = this.auth.getSetor();
+      this.registerForm.patchValue({ setor: setorLogado });
     }
   }
 
   onSubmit(): void {
     if (this.registerForm.invalid) return;
 
+    const sigiloso = this.registerForm.value.sigiloso === 'sim';
+
+    const setorFinal = this.indexEdicao !== null
+      ? this.registerForm.value.setor // mantém o original na edição
+      : (sigiloso ? this.auth.getSetor() : 'geral'); // atribui corretamente no cadastro
+
     const dados: Processo = {
-      ...this.registerForm.value,
-      passos: typeof this.registerForm.value.passos === 'string'
-      ? this.registerForm.value.passos
-          .split('\n')
-          .map((p: string) => p.trim())
-          .filter((p: string) => p.length > 0)
-      : [],
-      sigiloso: this.registerForm.value.sigiloso === 'sim'
+      nome: this.registerForm.value.nome,
+      setor: setorFinal,
+      cargo: this.registerForm.value.cargo,
+      processo: this.registerForm.value.processo,
+      descricao: this.registerForm.value.descricao,
+      passos: this.registerForm.value.passos
+        .split('\n')
+        .map((p: string) => p.trim())
+        .filter((p: string) => p.length > 0),
+      sigiloso
     };
 
     if (this.indexEdicao !== null) {
