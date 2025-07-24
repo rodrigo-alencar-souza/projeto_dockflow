@@ -6,7 +6,14 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
-import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  FormsModule,
+  ReactiveFormsModule,
+  FormBuilder,
+  FormGroup,
+  Validators
+} from '@angular/forms';
+import { v4 as uuidv4 } from 'uuid';
 import { Router } from '@angular/router';
 import { ProcessoService } from '../service/processo.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -62,7 +69,7 @@ export class SignUp implements OnInit {
       if (processo) {
         this.registerForm.patchValue({
           nome: processo.nome,
-          setor: processo.setor, // mantém o setor original
+          setor: processo.setor,
           cargo: processo.cargo,
           processo: processo.processo,
           descricao: processo.descricao,
@@ -71,7 +78,6 @@ export class SignUp implements OnInit {
         });
       }
     } else {
-      // preenche setor automaticamente no cadastro
       const setorLogado = this.auth.getSetor();
       this.registerForm.patchValue({ setor: setorLogado });
     }
@@ -81,12 +87,16 @@ export class SignUp implements OnInit {
     if (this.registerForm.invalid) return;
 
     const sigiloso = this.registerForm.value.sigiloso === 'sim';
-
     const setorFinal = this.indexEdicao !== null
-      ? this.registerForm.value.setor // mantém o original na edição
-      : (sigiloso ? this.auth.getSetor() : 'geral'); // atribui corretamente no cadastro
+      ? this.registerForm.value.setor
+      : (sigiloso ? this.auth.getSetor() : 'geral');
+
+    const id = this.indexEdicao !== null
+      ? this.processoService.getProcessoPorIndice(this.indexEdicao)?.id || uuidv4()
+      : uuidv4();
 
     const dados: Processo = {
+      id,
       nome: this.registerForm.value.nome,
       setor: setorFinal,
       cargo: this.registerForm.value.cargo,
@@ -104,7 +114,7 @@ export class SignUp implements OnInit {
       this.snackBar.open('Processo atualizado com sucesso!', '', { duration: 3000 });
     } else {
       this.processoService.adicionarProcesso(dados);
-      this.snackBar.open('Processo cadastrado com sucesso!', '', { duration: 3000 });
+      this.snackBar.open('Processo cadastrado com s ucesso!', '', { duration: 3000 });
     }
 
     this.router.navigate(['home']);

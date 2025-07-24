@@ -38,7 +38,6 @@ export class CardComponent implements OnInit {
     });
   }
 
-
   atualizarLista(): void {
     this.processosPorSetor = this.processoService.getProcessosVisiveis();
   }
@@ -53,18 +52,18 @@ export class CardComponent implements OnInit {
   editarProcesso(index: number): void {
     const processoVisivel = this.processosPorSetor[index];
     const indexGlobal = this.processoService.getIndiceGlobal(processoVisivel);
-    this.processoService.setIndiceEdicao(indexGlobal);
-    this.router.navigate(['/sign-up']);
+    this.processoService.setProcessoSelecionado(processoVisivel);
+    this.router.navigate(['/sign-up']); 
   }
 
-
   excluirProcesso(index: number): void {
-    this.processoService.removerProcesso(index);
-    this.atualizarLista();
+    const processoVisivel = this.processosPorSetor[index];
+    const indexGlobal = this.processoService.getIndiceGlobal(processoVisivel);
+    this.processoService.removerProcesso(indexGlobal);
   }
 
   Process_button_navigate(): void {
-    this.processoService.setIndiceEdicao(null);
+    this.processoService.clearEdicao();
     this.router.navigate(['/sign-up']);
   }
 }

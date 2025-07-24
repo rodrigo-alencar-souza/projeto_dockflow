@@ -12,9 +12,9 @@ export class ProcessoService {
   private indiceEdicao: number | null = null;
 
   constructor(private auth: AuthService) {
-    // Mock inicial
     this.processosSubject.next([
       {
+        id: '1',
         nome: 'Projeto estrutural',
         setor: 'engenharia',
         cargo: 'Engenheiro Civil',
@@ -24,6 +24,7 @@ export class ProcessoService {
         sigiloso: true
       },
       {
+        id: '2',
         nome: 'Linha de montagem',
         setor: 'producao',
         cargo: 'Supervisor de Produção',
@@ -37,27 +38,32 @@ export class ProcessoService {
 
   getProcessosVisiveis(): Processo[] {
     const setorLogado = this.auth.getSetor();
-
-    return this.processosSubject.value.filter(processo => {
-      // Se for sigiloso, aparece somente no setor correspondente
-      if (processo.sigiloso) {
-        return processo.setor === setorLogado;
-      }
-
-      // Se NÃO for sigiloso, aparece somente se for do tipo 'geral'
-      return processo.setor === 'geral';
-    });
-  }
-  
-  removerProcesso(index: number): void {
-    const processos = [...this.processosSubject.value];
-    processos.splice(index, 1);
-    this.processosSubject.next(processos);
+    return this.processosSubject.value.filter(processo =>
+      processo.sigiloso
+        ? processo.setor === setorLogado
+        : processo.setor === 'geral'
+    );
   }
 
-  adicionarProcesso(novoProcesso: Processo): void {
-    const processos = [...this.processosSubject.value, novoProcesso];
-    this.processosSubject.next(processos);
+  setProcessoSelecionado(processo: Processo): void {
+  this.processoSelecionado = processo;
+  this.indiceEdicao = this.getIndiceGlobal(processo);
+}
+
+  clearEdicao(): void {
+    this.indiceEdicao = null;
+  }
+
+  getIndiceGlobal(processo: Processo): number {
+    return this.processosSubject.value.findIndex(p => p.id === processo.id);
+  }
+
+  getIndiceEdicao(): number | null {
+    return this.indiceEdicao;
+  }
+
+  getProcessoPorIndice(index: number): Processo | null {
+    return this.processosSubject.value[index] || null;
   }
 
   atualizarProcesso(index: number, processoAtualizado: Processo): void {
@@ -66,24 +72,14 @@ export class ProcessoService {
     this.processosSubject.next(processos);
   }
 
-  setIndiceEdicao(index: number | null): void {
-    this.indiceEdicao = index;
+  adicionarProcesso(novoProcesso: Processo): void {
+    const processos = [...this.processosSubject.value, novoProcesso];
+    this.processosSubject.next(processos);
   }
 
-  getIndiceGlobal(processo: Processo): number {
-    return this.processosSubject.value.findIndex(p =>
-      p.nome === processo.nome &&
-      p.setor === processo.setor &&
-      p.processo === processo.processo &&
-      p.descricao === processo.descricao
-    );
-  }
-  
-  getIndiceEdicao(): number | null {
-    return this.indiceEdicao;
-  }
-
-  getProcessoPorIndice(index: number): Processo | null {
-    return this.processosSubject.value[index] || null;
+  removerProcesso(index: number): void {
+    const processos = [...this.processosSubject.value];
+    processos.splice(index, 1);
+    this.processosSubject.next(processos);
   }
 }
