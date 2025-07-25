@@ -10,6 +10,14 @@ html {
   ));
 }
 
+.title{
+  display:flex;
+  margin:0;
+  padding:0;
+  max-width: 2rem;
+  max-height: 2rem;
+}
+
 .card-grid {
   display:flex;
   flex-direction: row; 
@@ -21,6 +29,7 @@ html {
 // ::ng-deep button[mat-icon-button]
 .button_menu
 {
+  margin-top: 0;
   background-color: rgb(71, 73, 71); // fundo escuro discreto
   color: #e0e0e0; // cor do ícone
   border-radius: 8px; // cantos arredondados
@@ -76,7 +85,7 @@ html {
   max-height: 11rem;
   height: 11rem;
   width: 100%;
-  margin: 4rem 2rem;
+  margin: 1.5rem 2rem;
   padding: 16px;
   font-family: 'Roboto', sans-serif;
   font-size: 1rem;

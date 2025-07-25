@@ -76,8 +76,9 @@ export class CardComponent {
 
   abrirDetalhes(processo: Processo): void {
   this.dialog.open(ProcessoDetailComponent, {
-    width: '150mm',      // para caber o conteúdo A4 230mm
+    width: '230mm',      // para caber o conteúdo A4 230mm
     height: 'auto',
+    maxWidth: '90%',
     data: processo
   });
 }
