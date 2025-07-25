@@ -11,6 +11,9 @@
 <mat-sidenav-container class="container">
   <mat-sidenav #sidenav mode="side" [(opened)]="sidebarAberta">
     <mat-nav-list class="nav-list">
+      <mat-list-item *ngIf="authService.isAdmin()">
+        <span matLine class="text-nav" routerLink="/painel-adm"> Painel ADM </span>
+      </mat-list-item>
       <mat-list-item >
         <span matLine  class="text-nav" routerLink="/geral"> Geral </span>
       </mat-list-item>

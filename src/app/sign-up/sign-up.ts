@@ -40,8 +40,16 @@ import { AuthService } from '../service/auth.service';
 export class SignUp implements OnInit {
   registerForm!: FormGroup;
   indexEdicao: number | null = null;
+
   setores: string[] = ['Geral', 'Engenharia', 'Fiscal', 'Produção'];
-  cargos: string[] = ['Diretor', 'Gerente', 'Supervisor', 'Analista', 'Técnico', 'Estagiário'];
+  cargos: string[] = [
+    'Diretor',
+    'Gerente',
+    'Supervisor',
+    'Analista',
+    'Técnico',
+    'Estagiário'
+  ];
 
   constructor(
     private snackBar: MatSnackBar,
@@ -78,6 +86,7 @@ export class SignUp implements OnInit {
         });
       }
     } else {
+      // Preenche setor automaticamente apenas se não estiver editando
       const setorLogado = this.auth.getSetor();
       this.registerForm.patchValue({ setor: setorLogado });
     }
@@ -87,9 +96,10 @@ export class SignUp implements OnInit {
     if (this.registerForm.invalid) return;
 
     const sigiloso = this.registerForm.value.sigiloso === 'sim';
+
     const setorFinal = this.indexEdicao !== null
       ? this.registerForm.value.setor
-      : (sigiloso ? this.auth.getSetor() : 'geral');
+      : (sigiloso ? this.auth.getSetor() : this.registerForm.value.setor);
 
     const id = this.indexEdicao !== null
       ? this.processoService.getProcessoPorIndice(this.indexEdicao)?.id || uuidv4()
@@ -114,7 +124,7 @@ export class SignUp implements OnInit {
       this.snackBar.open('Processo atualizado com sucesso!', '', { duration: 3000 });
     } else {
       this.processoService.adicionarProcesso(dados);
-      this.snackBar.open('Processo cadastrado com s ucesso!', '', { duration: 3000 });
+      this.snackBar.open('Processo cadastrado com sucesso!', '', { duration: 3000 });
     }
 
     this.router.navigate(['home']);

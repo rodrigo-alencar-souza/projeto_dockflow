@@ -10,8 +10,8 @@ import { General } from './general/general';
 import { Home } from './home/home';
 import { setorGuard } from './guards/setor.guards';
 import { ProcessoDetailComponent } from './detail.process/detail.process';
-
-
+import { AdminGuard } from './guards/admin.guards';
+import { PainelAdmComponent } from './painel-adm/painel-adm.component';
 
 
 export const routes: Routes = [
@@ -19,6 +19,7 @@ export const routes: Routes = [
     { path: 'home', component: Home },
     { path: 'sign-up', component: SignUp, canActivate: [setorGuard], data: { setor: 'geral' }},
     { path: 'login', component: Login },
+    { path: 'painel-adm', component: PainelAdmComponent, canActivate: [AdminGuard] },
     { path: 'cadastro-usuario', component: UserSignUp},
     { path: 'cadastro-processo', component: SignUp },
     {path: 'editar-processo/:index', component: SignUp},
@@ -27,6 +28,7 @@ export const routes: Routes = [
     { path: 'fiscal', component: Tax, canActivate: [setorGuard], data: { setor: 'fiscal'} },
     { path: 'geral', component: General },
     { path: '', redirectTo: 'home', pathMatch: 'full' }];
+    
     
 //     { path: 'detail-process', component: ProcessoDetailComponent, canActivate: [setorGuard], data: { setor: 'geral' }}
 

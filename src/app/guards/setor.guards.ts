@@ -9,6 +9,7 @@ export const setorGuard: CanActivateFn = (route) => {
   const setorNecessario = route.data['setor'];
   const setorUsuario = auth.getSetor();
 
+
   if (!auth.isAuthenticated()) {
     router.navigate(['/login']);
     return false;
