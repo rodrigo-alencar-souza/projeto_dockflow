@@ -2,9 +2,11 @@
   <button mat-icon-button class="icon_sidebar_button" (click)="sidenav.toggle()" aria-label="Fechar Sidebar" class="menu-icon">
     <mat-icon class="icon_sidebar">menu</mat-icon>
   </button>
-  
-  <!-- <img [src]= "'assets/logo2.png'" width="30px" height="30px"/> -->
-  <span class="toolbar-title">📕DockFlow</span>  
+  <div class="image-container" routerLink="/home" >
+  <img [src]= "'assets/logodock.png'" width="30px" height="30px"/>
+  <img [src]= "'assets/logotipodockflow.png'" width="150px" height="30px"/>
+  <!-- <span class="toolbar-title">📕DockFlow</span>   -->
+   </div>
   <div class="button">
         <button class="login-button" routerLink="/login" > Login </button>
   </div>
@@ -13,9 +15,6 @@
 <mat-sidenav-container class="container">
   <mat-sidenav #sidenav mode="side" [(opened)]="sidebarAberta">
     <mat-nav-list class="nav-list">
-      <mat-list-item >
-        <span matLine  class="text-nav" routerLink="/home"> Home </span>
-      </mat-list-item>
       <mat-list-item >
         <span matLine  class="text-nav" routerLink="/geral"> Geral </span>
       </mat-list-item>
