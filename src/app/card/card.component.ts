@@ -78,10 +78,8 @@ export class CardComponent {
   this.dialog.open(ProcessoDetailComponent, {
     width: '230mm',      // para caber o conteúdo A4 230mm
     height: 'auto',
-    maxWidth: '90%',
     data: processo
   });
 }
-
 
 }
