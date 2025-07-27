@@ -43,7 +43,7 @@ export class SignUp {
   cargos: string[] = ["Diretor", "Gerente", "Supervisor", "Analista", "Técnico", "Estagiário"]
   registerForm : FormGroup;
 
-constructor(private snackBar: MatSnackBar, private processoService: ProcessoService, private route: ActivatedRoute, private router: Router, private fb: FormBuilder) { this.registerForm = this.fb.group({ nome: ['', Validators.required], setor: ['', Validators.required], cargo: ['', Validators.required], processo: ['', Validators.required], descricao: [''], passos: [''], sigiloso: ['nao', Validators.required] }); }
+constructor(private snackBar: MatSnackBar, private processoService: ProcessoService, private route: ActivatedRoute, private router: Router, private fb: FormBuilder) { this.registerForm = this.fb.group({ nome: ['', Validators.required], setor: ['', Validators.required], cargo: ['', Validators.required], processo: ['', Validators.required], descricao: [''], passos: [''] }); } //sigiloso: ['nao', Validators.required]
 
 ngOnInit(): void {
   const index = this.route.snapshot.paramMap.get('index');
