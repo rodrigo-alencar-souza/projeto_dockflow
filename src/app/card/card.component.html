@@ -10,6 +10,7 @@
   <mat-card-header class="process-card__description">
     <mat-card-title>{{ processo.processo }}</mat-card-title>
     <mat-card-subtitle>{{ processo.setor }}</mat-card-subtitle>
+    <mat-card-subtitle>{{ processo.nome }} ({{ processo.cargo}}) </mat-card-subtitle>
     <button (click)="$event.stopPropagation();" class="button_menu" mat-icon-button [matMenuTriggerFor]="menu">
       <mat-icon>more_vert</mat-icon>
     </button>
