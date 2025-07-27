@@ -1,10 +1,10 @@
 export interface Processo {
-  id: number | string;
+  id: string;
   nome: string;
   setor: string;
   cargo: string;
   processo: string;
   descricao: string;
-  passos: string;
-  sigiloso: string;
+  passos: string[];
+  sigiloso: boolean;
 }

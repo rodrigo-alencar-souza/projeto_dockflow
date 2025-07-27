@@ -1,85 +1,69 @@
-import { Component, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { ProcessoService } from '../service/process.service';
+import { Processo } from '../models/processo.model';
+import { Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { DetailProcess } from '../detail.process/detail.process';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
-import { MatListModule } from '@angular/material/list';
-import { MatChipsModule } from '@angular/material/chips';
+import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
-import { MatIcon } from '@angular/material/icon';
 import { MatIconModule } from '@angular/material/icon';
-import { Router } from '@angular/router';
-import { Processo } from '../models/processo.model';
-import { ProcessoService } from '../service/process.service';
-import { MatDialog } from '@angular/material/dialog';
-import { ProcessoDetailComponent } from '../detail.process/detail.process';
-import { SignUp } from '../sign-up/sign-up';
-
-
 
 @Component({
   selector: 'app-card',
-  standalone: true, // ← Isso precisa estar aqui
-  imports: [CommonModule, MatCardModule, MatListModule, MatChipsModule, MatMenuModule, MatIcon, MatIconModule],
+  standalone: true,
+  imports: [
+    CommonModule,
+    MatCardModule,
+    MatButtonModule,
+    MatMenuModule,
+    MatIconModule
+  ],
   templateUrl: './card.component.html',
-  styleUrls: ['./card.component.scss'],
+  styleUrls: ['./card.component.scss']
 })
-export class CardComponent {
- @Input() setor: string = '';
+export class CardComponent implements OnInit {
   processosPorSetor: Processo[] = [];
-  
-  isActive = false;
 
-  constructor(private processoService: ProcessoService, private dialog: MatDialog, private router: Router) {}
+  constructor(
+    private processoService: ProcessoService,
+    private router: Router,
+    private dialog: MatDialog
+  ) {}
 
-  Process_button_navigate(): void {
-        this.router.navigate(['cadastro-processo']);
-      }
-
-  ngOnInit() {
-    this.processoService.processos$.subscribe(processos => {
-      this.processosPorSetor = processos.filter((p) => p.setor === this.setor);
+  ngOnInit(): void {
+    this.processoService.processos$.subscribe(() => {
+      this.atualizarLista();
     });
   }
 
-  // editarProcesso(index: number, processo: Processo): void {
-  //   // abrir um diálogo de edição, ou navegar para o formulário com os dados preenchidos
-  //   // Aqui simplificamos com um prompt
-  //   const novoTitulo = prompt('Novo nome do processo:', processo.processo);
-  //   if (novoTitulo !== null) {
-  //     const processoEditado = { ...processo, processo: novoTitulo };
-  //     this.processoService.atualizarProcesso(index, processoEditado);
-  //   }
-  // }
-
-//   editarProcesso(index: number, processo: Processo): void {
-//   const dialogRef = this.dialog.open(SignUp, {
-//     width: '600px',
-//     data: { processoEditado: processo, indexEdicao: index },
-//   });
-
-//   dialogRef.componentInstance.atualizarProcesso.subscribe(({ processo, index }) => {
-//     this.processoService.atualizarProcesso(index, processo);
-//   });
-// }
-
-  editarProcesso(index: number): void {
-  this.router.navigate(['/editar-processo', index]);
-}
-
-
-
-  excluirProcesso(index: number): void {
-    const confirmacao = confirm('Tem certeza que deseja excluir este processo?');
-    if (confirmacao) {
-      this.processoService.removerProcesso(index);
-    }
+  atualizarLista(): void {
+    this.processosPorSetor = this.processoService.getProcessosVisiveis();
   }
 
   abrirDetalhes(processo: Processo): void {
-  this.dialog.open(ProcessoDetailComponent, {
-    width: '230mm',      // para caber o conteúdo A4 230mm
-    height: 'auto',
-    data: processo
-  });
-}
+    this.dialog.open(DetailProcess, {
+      width: '800px',
+      data: processo
+    });
+  }
 
+  editarProcesso(index: number): void {
+    const processoVisivel = this.processosPorSetor[index];
+    const indexGlobal = this.processoService.getIndiceGlobal(processoVisivel);
+    this.processoService.setProcessoSelecionado(processoVisivel);
+    this.router.navigate(['/sign-up']); 
+  }
+
+  excluirProcesso(index: number): void {
+    const processoVisivel = this.processosPorSetor[index];
+    const indexGlobal = this.processoService.getIndiceGlobal(processoVisivel);
+    this.processoService.removerProcesso(indexGlobal);
+  }
+
+  Process_button_navigate(): void {
+    this.processoService.clearEdicao();
+    this.router.navigate(['/sign-up']);
+  }
 }

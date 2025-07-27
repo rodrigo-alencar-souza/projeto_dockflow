@@ -6,6 +6,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { AuthService } from '../service/auth.service';
 
 
 
@@ -17,6 +18,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 })
 export class Sidebar {
 
+  constructor(public authService: AuthService) {}
+
   sidebarAberta = false;
 
   toggleSidebar(): void {
@@ -25,7 +28,4 @@ export class Sidebar {
 
 
   }
-
-
-
 

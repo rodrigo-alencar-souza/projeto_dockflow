@@ -9,12 +9,12 @@ import html2canvas from 'html2canvas';
   selector: 'app-processo-detail',
   standalone: true,
   imports: [CommonModule, MatDialogModule],
-  templateUrl: './detail.process.html',
-  styleUrls: ['./detail.process.scss']
+  templateUrl: 'detail.process.html',
+  styleUrls: ['detail.process.scss']
 })
-export class ProcessoDetailComponent {
+export class DetailProcess {
   constructor(
-    private dialogRef: MatDialogRef<ProcessoDetailComponent>,
+    private dialogRef: MatDialogRef<DetailProcess>,
     @Inject(MAT_DIALOG_DATA) public data: Processo
   ) {}
 

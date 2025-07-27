@@ -3,7 +3,7 @@
   </div>
 
 <mat-card class="register-container">
-<h2>{{ modoEdicao ? 'Edição de Processo' : 'Cadastro de Processo' }}</h2>
+<h2>{{ indexEdicao !== null ? 'Edição de Processo' : 'Cadastro de Processo' }}</h2>
 <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
   <mat-form-field appearance="fill"><mat-label>Nome (Colaborador)</mat-label>
     <input matInput formControlName="nome" required />

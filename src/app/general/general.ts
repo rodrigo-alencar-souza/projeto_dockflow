@@ -5,6 +5,7 @@ import { CardComponent } from '../card/card.component';
 
 @Component({
   selector: 'app-general',
+  standalone: true,
   imports: [RouterModule, Sidebar, CardComponent],
   templateUrl: './general.html',
   styleUrl: './general.scss'

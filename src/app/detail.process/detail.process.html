@@ -9,7 +9,7 @@
     <p>{{ data.descricao }}</p>
     <p><strong>Passo a Passo:</strong></p>
     <ol>
-      <li *ngFor="let passo of data.passos.split('\n')">{{ passo }}</li>
+      <li *ngFor="let passo of data.passos">{{ passo }}</li>
     </ol>
     <p><strong>Sigiloso:</strong> {{ data.sigiloso }}</p>
   </div>
