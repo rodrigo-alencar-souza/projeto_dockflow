@@ -1,15 +1,12 @@
 import { Component } from '@angular/core';
 import { Sidebar } from '../sidebar/sidebar';
-import { RouterModule } from '@angular/router';
 import { CardComponent } from '../card/card.component';
 
 @Component({
   selector: 'app-general',
   standalone: true,
-  imports: [RouterModule, Sidebar, CardComponent],
+  imports: [Sidebar, CardComponent],
   templateUrl: './general.html',
-  styleUrl: './general.scss'
+  styleUrls: ['./general.scss']
 })
-export class General {
-
-}
+export class General {}

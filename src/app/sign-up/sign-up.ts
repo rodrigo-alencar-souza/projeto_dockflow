@@ -61,37 +61,44 @@ export class SignUp implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.registerForm = this.fb.group({
-      nome: ['', Validators.required],
-      setor: ['', Validators.required],
-      cargo: ['', Validators.required],
-      processo: ['', Validators.required],
-      descricao: [''],
-      passos: [''],
-      sigiloso: ['nao', Validators.required]
-    });
+  const setorLogado = this.auth.getSetor()?.toLowerCase().trim();
+  const roleLogado = this.auth.getRole();
 
-    this.indexEdicao = this.processoService.getIndiceEdicao();
-
-    if (this.indexEdicao !== null) {
-      const processo = this.processoService.getProcessoPorIndice(this.indexEdicao);
-      if (processo) {
-        this.registerForm.patchValue({
-          nome: processo.nome,
-          setor: processo.setor,
-          cargo: processo.cargo,
-          processo: processo.processo,
-          descricao: processo.descricao,
-          passos: processo.passos.join('\n'),
-          sigiloso: processo.sigiloso ? 'sim' : 'nao'
-        });
-      }
-    } else {
-      // Preenche setor automaticamente apenas se não estiver editando
-      const setorLogado = this.auth.getSetor();
-      this.registerForm.patchValue({ setor: setorLogado });
-    }
+  // Corrige dropdown — apenas "geral" + setor do usuário
+  this.setores = ['geral'];
+  if (setorLogado && setorLogado !== 'geral' && !this.setores.includes(setorLogado)) {
+    this.setores.push(setorLogado);
   }
+
+  this.registerForm = this.fb.group({
+    nome: ['', Validators.required],
+    setor: ['', Validators.required],
+    cargo: ['', Validators.required],
+    processo: ['', Validators.required],
+    descricao: [''],
+    passos: [''],
+    sigiloso: ['nao', Validators.required]
+  });
+
+  this.indexEdicao = this.processoService.getIndiceEdicao();
+
+  if (this.indexEdicao !== null) {
+    const processo = this.processoService.getProcessoPorIndice(this.indexEdicao);
+    if (processo) {
+      this.registerForm.patchValue({
+        nome: processo.nome,
+        setor: processo.setor,
+        cargo: processo.cargo,
+        processo: processo.processo,
+        descricao: processo.descricao,
+        passos: processo.passos.join('\n'),
+        sigiloso: processo.sigiloso ? 'sim' : 'nao'
+      });
+    }
+  } else {
+    this.registerForm.patchValue({ setor: setorLogado });
+  }
+}
 
   onSubmit(): void {
     if (this.registerForm.invalid) return;

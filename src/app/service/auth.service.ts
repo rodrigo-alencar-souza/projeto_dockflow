@@ -16,7 +16,7 @@ const MOCK_USERS: UsuarioMock[] = [
   { username: 'fiscal', password: '123', setor: 'fiscal', perfil: PerfilUsuario.NORMAL },
   { username: 'producao', password: '123', setor: 'producao', perfil: PerfilUsuario.NORMAL },
   { username: 'engenharia', password: '123', setor: 'engenharia', perfil: PerfilUsuario.NORMAL },
-  { username: 'administrador', password: '321', setor: 'engenharia', perfil: PerfilUsuario.ADM }, 
+  { username: 'administrador', password: '321', setor: 'engenharia', perfil: PerfilUsuario.ADM }
 ];
 
 @Injectable({ providedIn: 'root' })
@@ -38,12 +38,23 @@ export class AuthService {
     return this.usuarioLogado;
   }
 
+  getRole(): string {
+    // Aqui você retorna a role do usuário logado
+    // Exemplo: pode vir do localStorage, de um token, ou do estado atual
+    return 'admin'; // ou o que fizer sentido no seu app
+  }
+
+  getUserRole(): string {
+    const perfil = this.usuarioLogado?.perfil;
+    return perfil === PerfilUsuario.ADM ? 'admin' : 'normal';
+  }
+
   isAdmin(): boolean {
     return this.usuarioLogado?.perfil === PerfilUsuario.ADM;
   }
 
-  getSetor(): string | null {
-    return this.usuarioLogado?.setor || null;
+  getSetor(): string {
+    return this.usuarioLogado?.setor ?? 'geral';
   }
 
   isAuthenticated(): boolean {

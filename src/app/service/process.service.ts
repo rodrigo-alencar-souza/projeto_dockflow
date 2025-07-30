@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { AuthService } from '../service/auth.service'; // ajuste o caminho se necessário
+import { AuthService } from '../service/auth.service';
 
 export interface Processo {
   id: string;
@@ -18,10 +18,11 @@ export class ProcessoService {
   private processosSubject = new BehaviorSubject<Processo[]>([]);
   processos$ = this.processosSubject.asObservable();
 
+  private processoSelecionado: Processo | null = null;
   private indiceEdicao: number | null = null;
 
   constructor(private auth: AuthService) {
-    this.processosSubject.next([
+    const processosMock: Processo[] = [
       {
         id: '1',
         nome: 'Projeto estrutural',
@@ -53,74 +54,87 @@ export class ProcessoService {
         sigiloso: true
       },
       {
-      id: '4',
-      nome: 'Controle de estoque',
-      setor: 'producao',
-      cargo: 'Auxiliar de Logística',
-      processo: 'Gestão de materiais e inventário',
-      descricao: 'Monitoramento de entradas/saídas e manutenção de níveis ideais de estoque',
-      passos: ['Conferência de materiais', 'Registro no sistema', 'Ajustes de inventário'],
-      sigiloso: false
-    },
-    {
-      id: '5',
-      nome: 'Planejamento de recursos',
-      setor: 'engenharia',
-      cargo: 'Engenheiro de Planejamento',
-      processo: 'Definição de recursos técnicos para novos projetos',
-      descricao: 'Escolha de materiais, equipamentos e estrutura necessária para execução técnica',
-      passos: ['Definição de escopo', 'Seleção de recursos', 'Elaboração de plano'],
-      sigiloso: true
-    },
-    {
-      id: '6',
-      nome: 'Treinamento de integração',
-      setor: 'rh',
-      cargo: 'Coordenador de RH',
-      processo: 'Integração de novos colaboradores',
-      descricao: 'Apresentação da empresa, políticas internas e primeiros passos operacionais',
-      passos: ['Boas-vindas', 'Apresentação institucional', 'Treinamento de segurança'],
-      sigiloso: false
-    },
-    {
-      id: '7',
-      nome: 'Processo-geral-teste',
-      setor: 'Geral',
-      cargo: 'Supervisor',
-      processo: 'Integração de novos colaboradores',
-      descricao: 'Apresentação da empresa, políticas internas e primeiros passos operacionais',
-      passos: ['Boas-vindas', 'Apresentação institucional', 'Treinamento de segurança'],
-      sigiloso: false
-    }
-    ]);
+        id: '4',
+        nome: 'Controle de estoque',
+        setor: 'producao',
+        cargo: 'Auxiliar de Logística',
+        processo: 'Gestão de materiais e inventário',
+        descricao: 'Monitoramento de entradas/saídas e manutenção de níveis ideais de estoque',
+        passos: ['Conferência de materiais', 'Registro no sistema', 'Ajustes de inventário'],
+        sigiloso: false
+      },
+      {
+        id: '5',
+        nome: 'Planejamento de recursos',
+        setor: 'engenharia',
+        cargo: 'Engenheiro de Planejamento',
+        processo: 'Definição de recursos técnicos para novos projetos',
+        descricao: 'Escolha de materiais, equipamentos e estrutura necessária para execução técnica',
+        passos: ['Definição de escopo', 'Seleção de recursos', 'Elaboração de plano'],
+        sigiloso: true
+      },
+      {
+        id: '6',
+        nome: 'Treinamento de integração',
+        setor: 'rh',
+        cargo: 'Coordenador de RH',
+        processo: 'Integração de novos colaboradores',
+        descricao: 'Apresentação da empresa, políticas internas e primeiros passos operacionais',
+        passos: ['Boas-vindas', 'Apresentação institucional', 'Treinamento de segurança'],
+        sigiloso: false
+      },
+      {
+        id: '7',
+        nome: 'Processo-geral-teste',
+        setor: 'geral',
+        cargo: 'Supervisor',
+        processo: 'Integração de novos colaboradores',
+        descricao: 'Apresentação da empresa, políticas internas e primeiros passos operacionais',
+        passos: ['Boas-vindas', 'Apresentação institucional', 'Treinamento de segurança'],
+        sigiloso: false
+      }
+    ];
+
+    this.processosSubject.next(processosMock);
   }
 
-  // 🔍 Filtro baseado no perfil
-  getProcessosVisiveis(): Processo[] {
-    const todos = this.processosSubject.value;
+  // ✅ Retorna todos os processos
+  getTodosProcessos(): Processo[] {
+    return this.processosSubject.value;
+  }
 
-    if (this.auth.isAdmin()) {
+  // 🔍 Filtro visível por setor e perfil
+  getProcessosVisiveis(abaSelecionada: string): Processo[] {
+    const todos = this.processosSubject.value;
+    const setorUsuario = this.auth.getSetor();
+    const isAdmin = this.auth.isAdmin();
+
+    if (isAdmin) {
       return todos;
     }
 
-    const setor = this.auth.getSetor();
-    return todos.filter(p => p.setor === setor);
+    return todos.filter(p =>
+      p.setor.toLowerCase() === abaSelecionada.toLowerCase() &&
+      p.setor.toLowerCase() === setorUsuario?.toLowerCase()
+    );
   }
 
-  // ✅ Adiciona novo processo
   adicionarProcesso(processo: Processo): void {
     const atual = [...this.processosSubject.value, processo];
     this.processosSubject.next(atual);
   }
 
-  // ✅ Atualiza processo por índice
   atualizarProcesso(index: number, novo: Processo): void {
     const lista = [...this.processosSubject.value];
     lista[index] = novo;
     this.processosSubject.next(lista);
   }
 
-  private processoSelecionado: Processo | null = null;
+  removerProcesso(index: number): void {
+    const lista = [...this.processosSubject.value];
+    lista.splice(index, 1);
+    this.processosSubject.next(lista);
+  }
 
   setProcessoSelecionado(processo: Processo): void {
     this.processoSelecionado = processo;
@@ -130,13 +144,10 @@ export class ProcessoService {
     return this.processoSelecionado;
   }
 
-
-  // ✅ Pega processo pelo índice
   getProcessoPorIndice(index: number): Processo | undefined {
     return this.processosSubject.value[index];
   }
 
-  // ✅ Gerencia estado de edição
   getIndiceEdicao(): number | null {
     return this.indiceEdicao;
   }
@@ -145,19 +156,10 @@ export class ProcessoService {
     this.indiceEdicao = index;
   }
 
-  // ✅ Utilitário para exclusão
-  removerProcesso(index: number): void {
-    const lista = [...this.processosSubject.value];
-    lista.splice(index, 1);
-    this.processosSubject.next(lista);
-  }
-
-  // ✅ Localiza índice global do processo
   getIndiceGlobal(processo: Processo): number {
     return this.processosSubject.value.findIndex(p => p.id === processo.id);
   }
 
-  // ✅ Limpa estado de edição
   clearEdicao(): void {
     this.indiceEdicao = null;
   }
