@@ -61,43 +61,52 @@ export class SignUp implements OnInit {
   ) {}
 
   ngOnInit(): void {
-  const setorLogado = this.auth.getSetor()?.toLowerCase().trim();
+    const setorLogado = this.auth.getSetor()?.toLowerCase().trim();
+    const isAdmin = this.auth.isAdmin();
 
-  // Corrige dropdown — apenas "geral" + setor do usuário
-  this.setores = ['geral'];
-  if (setorLogado && setorLogado !== 'geral' && !this.setores.includes(setorLogado)) {
-    this.setores.push(setorLogado);
-  }
+    const todosSetores = ['geral', 'engenharia', 'fiscal', 'producao'];
 
-  this.registerForm = this.fb.group({
-    nome: ['', Validators.required],
-    setor: ['', Validators.required],
-    cargo: ['', Validators.required],
-    processo: ['', Validators.required],
-    descricao: [''],
-    passos: [''],
-    sigiloso: ['nao', Validators.required]
-  });
-
-  this.indexEdicao = this.processoService.getIndiceEdicao();
-
-  if (this.indexEdicao !== null) {
-    const processo = this.processoService.getProcessoPorIndice(this.indexEdicao);
-    if (processo) {
-      this.registerForm.patchValue({
-        nome: processo.nome,
-        setor: processo.setor,
-        cargo: processo.cargo,
-        processo: processo.processo,
-        descricao: processo.descricao,
-        passos: processo.passos.join('\n'),
-        sigiloso: processo.sigiloso ? 'sim' : 'nao'
-      });
+    if (isAdmin) {
+      // ADM vê todos os setores
+      this.setores = todosSetores;
+    } else {
+      // Usuário comum vê apenas "geral" + seu próprio setor
+      this.setores = ['geral'];
+      if (setorLogado && !this.setores.includes(setorLogado)) {
+        this.setores.push(setorLogado);
+      }
     }
-  } else {
-    this.registerForm.patchValue({ setor: setorLogado });
+
+    this.registerForm = this.fb.group({
+      nome: ['', Validators.required],
+      setor: ['', Validators.required],
+      cargo: ['', Validators.required],
+      processo: ['', Validators.required],
+      descricao: [''],
+      passos: [''],
+      sigiloso: ['nao', Validators.required]
+    });
+
+    this.indexEdicao = this.processoService.getIndiceEdicao();
+
+    if (this.indexEdicao !== null) {
+      const processo = this.processoService.getProcessoPorIndice(this.indexEdicao);
+      if (processo) {
+        this.registerForm.patchValue({
+          nome: processo.nome,
+          setor: processo.setor,
+          cargo: processo.cargo,
+          processo: processo.processo,
+          descricao: processo.descricao,
+          passos: processo.passos.join('\n'),
+          sigiloso: processo.sigiloso ? 'sim' : 'nao'
+        });
+      }
+    } else {
+      this.registerForm.patchValue({ setor: setorLogado });
+    }
   }
-}
+
 
   onSubmit(): void {
     if (this.registerForm.invalid) return;
