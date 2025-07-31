@@ -19,7 +19,7 @@ html {
 .title{
   display: inline-block;
   white-space: nowrap;
-  margin:0;
+  margin:0 0 0 2.7rem;
   padding:0;
   max-width: 2rem;
   max-height: 2rem;
@@ -32,6 +32,7 @@ html {
   color: #fdfcfc;
   position: relative;
   display:flex;
+  margin-right: 1.5rem;
   margin-top: 1rem;
   margin-left: auto;
   margin-bottom: 1rem;
@@ -54,7 +55,10 @@ html {
 // ::ng-deep button[mat-icon-button]
 .button_menu
 {
-  margin-top: 0;
+  position: absolute;
+  top: 1.2rem; /* ajusta a distância do topo — você pode aumentar ou diminuir conforme necessário */
+  right: 1.5rem; /* opcional, coloca o botão no canto direito */
+  z-index: 10; /* garante que fique por cima do conteúdo */
   background-color: rgb(71, 73, 71); // fundo escuro discreto
   color: #e0e0e0; // cor do ícone
   border-radius: 8px; // cantos arredondados
@@ -104,6 +108,7 @@ html {
 
 
 .process-card {
+  position: relative;
   background-color: #333; // cor de fundo escura
   color: #f0f0f0;
   max-width: 23rem;
@@ -117,6 +122,11 @@ html {
   line-height: 1.6;
   border: none;
   box-sizing: border-box;
+  overflow-y: hidden;
+ 
+  // &:hover {
+  //   overflow-y: auto;
+  // }
   
   
 
@@ -129,9 +139,24 @@ html {
     padding-top: 1px;
     cursor: pointer;
 
-    mat-card-subtitle {
+    mat-card-title {
+      max-width: 17rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
       color: white;
       cursor: pointer;
+      overflow-x: hidden;
+    }
+
+    mat-card-subtitle {
+      max-width: 20rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      color: white;
+      cursor: pointer;
+      overflow-x: hidden;
     }
   }
 
@@ -164,7 +189,7 @@ html {
       text-overflow: ellipsis;
       display: block;
       width: 100%;
-      margin: 0;
+      margin: 0 0 0 0.35rem;
       padding-top: 12px;
       cursor: pointer;
 
