@@ -1,0 +1,49 @@
+from fastapi import APIRouter, Depends, HTTPException, status
+from sqlalchemy.orm import Session
+from typing import List
+
+from app.db.deps import get_db
+from app.db.models.models import Activity
+from app.schemas.process import ActivityCreate, ActivityOut, ActivityUpdate
+
+router = APIRouter(prefix="/activities", tags=["activities"])
+
+@router.post("/", response_model=ActivityOut)
+def create_activity(activity: ActivityCreate, db: Session = Depends(get_db)):
+    db_activity = Activity(**activity.model_dump())
+    db.add(db_activity)
+    db.commit()
+    db.refresh(db_activity)
+    return db_activity
+
+@router.get("/", response_model=List[ActivityOut])
+def list_activities(db: Session = Depends(get_db)):
+    return db.query(Activity).all()
+
+
+
+@router.put("/{process_id}", response_model=ActivityOut)
+def atualizar_formulario(
+    formulario_id: int,
+    update_data: ActivityUpdate,
+    db: Session = Depends(get_db)
+):
+    formulario = db.query(Activity).get(formulario_id)
+    if not formulario:
+        raise HTTPException(status_code=404, detail="Formulário não encontrado")
+
+    for attr, value in update_data.dict(exclude_unset=True).items():
+        setattr(formulario, attr, value)
+
+    db.commit()
+    db.refresh(formulario)
+    return formulario
+
+@router.delete("/{process_id}", status_code=status.HTTP_204_NO_CONTENT)
+def deletar_formulario(formulario_id: int, db: Session = Depends(get_db)):
+    formulario = db.query(Activity).get(formulario_id)
+    if not formulario:
+        raise HTTPException(status_code=404, detail="Formulário não encontrado")
+
+    db.delete(formulario)
+    db.commit()
