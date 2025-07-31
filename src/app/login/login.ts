@@ -9,12 +9,13 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../service/auth.service';
 import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-login',
   imports: [
     MatInputModule, MatFormFieldModule, MatSelectModule, MatRadioModule, 
-    MatButtonModule, MatCardModule, FormsModule, ReactiveFormsModule
+    MatButtonModule, MatCardModule, FormsModule, ReactiveFormsModule, CommonModule
   ],
   templateUrl: './login.html',
   styleUrl: './login.scss'
@@ -30,7 +31,7 @@ export class Login {
     private auth: AuthService
   ) {
     this.loginForm = this.fb.group({
-      email: ['', Validators.required],
+      username: ['', Validators.required],
       password: ['', Validators.required]
     });
   }
@@ -45,14 +46,16 @@ export class Login {
 
   onSubmit(): void {
     if (this.loginForm.valid) {
-      const { email, password } = this.loginForm.value;
-      const success = this.auth.login(email, password);
+      const { username, password } = this.loginForm.value;
+      const success = this.auth.login(username, password);
 
-      if (success) {
-        this.loginError = false;
-        this.router.navigate(['/home']); // ✅ redireciona todos para 'home'
-      } else {
+      if (!success) {
         this.loginError = true;
+        this.loginForm.patchValue({ password: '' });
+
+      } else {
+        this.loginError = false; // ← limpa o erro!
+        this.router.navigate(['/home']); // exemplo de rota
       }
     }
   }

@@ -25,18 +25,17 @@ const MOCK_USERS: UsuarioMock[] = [
 export class AuthService {
   private usuarioLogado: UsuarioMock | null = null;
 
-  login(username: string, password: string): boolean {
-    const usuario = MOCK_USERS.find(
-      user => user.username === username && user.password === password
-    );
-    console.log('Tentativa de login:', username, password, 'Resultado:', usuario);
-    if (usuario) {
-      this.usuarioLogado = usuario;
-      return true;
+    login(username: string, password: string): boolean {
+      const usuario = MOCK_USERS.find(
+        user => user.username === username && user.password === password
+      );
+      if (usuario) {
+        this.usuarioLogado = usuario;
+        return true;
+      }
+      return false;
     }
-    return false;
-  }
-
+    
   getUser(): UsuarioMock | null {
     return this.usuarioLogado;
   }
