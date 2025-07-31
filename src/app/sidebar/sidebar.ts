@@ -25,18 +25,26 @@ import { AuthService } from '../service/auth.service';
 })
 export class Sidebar implements OnInit {
   sidebarAberta = false;
-  setores: string[] = [];
+
+  // Novo array para menus visíveis
+  menuItens: { label: string; route: string; setor: string }[] = [];
 
   constructor(public authService: AuthService) {}
 
   ngOnInit(): void {
     const isAdmin = this.authService.isAdmin();
-    const setor = this.authService.getSetor();
+    const setorUsuario = this.authService.getSetor();
 
-    this.setores = isAdmin
-      ? ['engenharia', 'producao', 'geral', 'fiscal']
-      : [setor, 'geral'];
+    const todosMenus = [
+      { label: 'Geral', route: '/geral', setor: 'geral' },
+      { label: 'Engenharia', route: '/engenharia', setor: 'engenharia' },
+      { label: 'Produção', route: '/producao', setor: 'producao' },
+      { label: 'Fiscal', route: '/fiscal', setor: 'fiscal' }
+    ];
 
+    this.menuItens = todosMenus.filter(menu =>
+      isAdmin || menu.setor === setorUsuario || menu.setor === 'geral'
+    );
   }
 
   toggleSidebar(): void {

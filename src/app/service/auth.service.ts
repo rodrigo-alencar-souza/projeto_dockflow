@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
 
-enum PerfilUsuario {
-  ADM = 'adm',
+// auth.service.ts
+export enum PerfilUsuario {
+  ADM = 'admin',       // aqui trocamos 'adm' por 'admin'
   NORMAL = 'normal'
 }
 
-interface UsuarioMock {
+
+export interface UsuarioMock {
   username: string;
   password: string;
   setor: string;
@@ -16,7 +18,7 @@ const MOCK_USERS: UsuarioMock[] = [
   { username: 'fiscal', password: '123', setor: 'fiscal', perfil: PerfilUsuario.NORMAL },
   { username: 'producao', password: '123', setor: 'producao', perfil: PerfilUsuario.NORMAL },
   { username: 'engenharia', password: '123', setor: 'engenharia', perfil: PerfilUsuario.NORMAL },
-  { username: 'administrador', password: '321', setor: 'engenharia', perfil: PerfilUsuario.ADM }
+  { username: 'adm', password: '123', setor: 'administracao', perfil: PerfilUsuario.ADM }
 ];
 
 @Injectable({ providedIn: 'root' })
@@ -27,6 +29,7 @@ export class AuthService {
     const usuario = MOCK_USERS.find(
       user => user.username === username && user.password === password
     );
+    console.log('Tentativa de login:', username, password, 'Resultado:', usuario);
     if (usuario) {
       this.usuarioLogado = usuario;
       return true;
@@ -38,15 +41,8 @@ export class AuthService {
     return this.usuarioLogado;
   }
 
-  getRole(): string {
-    // Aqui você retorna a role do usuário logado
-    // Exemplo: pode vir do localStorage, de um token, ou do estado atual
-    return 'admin'; // ou o que fizer sentido no seu app
-  }
-
   getUserRole(): string {
-    const perfil = this.usuarioLogado?.perfil;
-    return perfil === PerfilUsuario.ADM ? 'admin' : 'normal';
+    return this.usuarioLogado?.perfil ?? PerfilUsuario.NORMAL;
   }
 
   isAdmin(): boolean {
@@ -55,6 +51,21 @@ export class AuthService {
 
   getSetor(): string {
     return this.usuarioLogado?.setor ?? 'geral';
+  }
+
+  getSetorRoute(): string {
+    const setor = this.getSetor();
+    switch (setor) {
+      case 'fiscal': return 'fiscal';
+      case 'producao': return 'producao';
+      case 'engenharia': return 'engenharia';
+      case 'administracao': return 'painel-adm';
+      default: return 'home';
+    }
+  }
+
+  canAccessSetor(setor: string): boolean {
+    return this.isAdmin() || this.getSetor() === setor || setor === 'geral';
   }
 
   isAuthenticated(): boolean {

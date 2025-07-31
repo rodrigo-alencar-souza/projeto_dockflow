@@ -15,7 +15,9 @@
   >
     <mat-card-header class="process-card__description">
       <mat-card-title>{{ processo.processo }}</mat-card-title>
-      <mat-card-subtitle>{{ processo.setor }}</mat-card-subtitle>
+      <mat-card-subtitle class="setor-label">
+        Setor: {{ processo.setor }}
+      </mat-card-subtitle>
       <mat-card-subtitle>{{ processo.nome }} ({{ processo.cargo }})</mat-card-subtitle>
 
       <button

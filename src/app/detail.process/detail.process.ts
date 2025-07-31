@@ -80,7 +80,13 @@ export class VisualizacaoComponent implements OnInit, AfterViewInit {
           {
             type: 'paragraph',
             data: { text: this.processo?.passos || 'Sem passo a passo disponível.' }
+          },
+          // Apagar em baixo qualquer coisa
+          {
+            type: 'header',
+            data: { text: `Setor: ${this.processo?.setor}`, level: 3 }
           }
+
         ]
       }
     });

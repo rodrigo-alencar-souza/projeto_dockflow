@@ -10,6 +10,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { AuthService } from '../service/auth.service';
+import { PerfilUsuario } from '../service/auth.service';
+
+
 
 @Component({
   selector: 'app-card',
@@ -23,10 +26,12 @@ import { AuthService } from '../service/auth.service';
   ],
   templateUrl: './card.component.html',
   styleUrls: ['./card.component.scss']
+  
 })
 export class CardComponent implements OnInit {
   processosPorSetor: Processo[] = [];
   abaSelecionada: string = 'geral';
+  
 
   constructor(
     private processoService: ProcessoService,
@@ -48,19 +53,29 @@ export class CardComponent implements OnInit {
   }
 
   atualizarLista(): void {
-    const todosProcessos = this.processoService.getTodosProcessos();
-    const isAdmin = this.auth.getUserRole() === 'admin';
-    const setorUsuario = this.auth.getSetor();
+  const todosProcessos = this.processoService.getTodosProcessos();
+  const isAdmin = this.auth.getUserRole() === PerfilUsuario.ADM;
+  const setorUsuario = this.auth.getSetor();
+  console.log('ADM?', isAdmin);
+  console.log('Processos recebidos:', todosProcessos);
 
-    this.processosPorSetor = todosProcessos.filter((processo: Processo) => {
-      if (isAdmin) {
-        return processo.setor === this.abaSelecionada || processo.setor === 'geral';
-      } else {
-        return processo.setor === this.abaSelecionada &&
-          (processo.setor === setorUsuario || processo.setor === 'geral');
-      }
-    });
-  }
+  this.processosPorSetor = todosProcessos.filter((processo: Processo) => {
+    // 🔍 Se estiver na aba 'geral', exibe apenas processos do setor 'geral' (tanto pra ADM quanto usuário comum)
+    if (this.abaSelecionada === 'geral') {
+      return processo.setor === 'geral';
+    }
+
+    // 🧑‍💼 Para ADM: exibe os processos do setor da aba (sem incluir os 'gerais')
+    if (isAdmin) {
+      return processo.setor === this.abaSelecionada;
+    }
+
+    // 👤 Para usuário comum: exibe processos do setor da aba apenas se pertencer ao setor do usuário
+    return processo.setor === this.abaSelecionada &&
+           processo.setor === setorUsuario;
+  });
+}
+
 
   abrirDetalhes(processo: Processo): void {
   this.processoService.setProcessoSelecionado(processo);

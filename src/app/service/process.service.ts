@@ -41,7 +41,7 @@ export class ProcessoService {
         processo: 'Montagem de produtos finais',
         descricao: 'Controle de etapas da produção e supervisão de qualidade',
         passos: ['Preparação de peças', 'Montagem', 'Inspeção'],
-        sigiloso: false
+        sigiloso: true
       },
       {
         id: '3',
