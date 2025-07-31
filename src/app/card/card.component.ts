@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ProcessoService } from '../service/process.service';
 import { Processo } from '../models/processo.model';
 import { MatDialog } from '@angular/material/dialog';
-import { DetailProcess } from '../detail.process/detail.process';
+import { VisualizacaoComponent } from '../detail.process/detail.process';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -31,7 +31,6 @@ export class CardComponent implements OnInit {
   constructor(
     private processoService: ProcessoService,
     private router: Router,
-    private dialog: MatDialog,
     private route: ActivatedRoute,
     public auth: AuthService
   ) {}
@@ -64,11 +63,9 @@ export class CardComponent implements OnInit {
   }
 
   abrirDetalhes(processo: Processo): void {
-    this.dialog.open(DetailProcess, {
-      width: '800px',
-      data: processo
-    });
-  }
+  this.processoService.setProcessoSelecionado(processo);
+  this.router.navigate(['/detail-process']);
+}
 
   editarProcesso(index: number): void {
     const processoVisivel = this.processosPorSetor[index];

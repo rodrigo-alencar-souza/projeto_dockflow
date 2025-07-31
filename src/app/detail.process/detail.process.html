@@ -1,23 +1,15 @@
-<h2 mat-dialog-title>Detalhes do Processo</h2>
+<div class = "editor-wrapper">
+<div id="editorjs"></div>
+</div>
 
-<mat-dialog-content class="dialog">
-  <div id="a4-content" class="a4-paper">
-    <h3>{{ data.processo }}</h3>
-    <p><strong>Setor:</strong> {{ data.setor }}</p>
-    <p><strong>Responsável:</strong> {{ data.nome }} ({{ data.cargo }})</p>
-    <p><strong>Descrição:</strong></p>
-    <p>{{ data.descricao }}</p>
-    <p><strong>Passo a Passo:</strong></p>
-    <ol>
-      <li *ngFor="let passo of data.passos">{{ passo }}</li>
-    </ol>
-    <p><strong>Sigiloso:</strong> {{ data.sigiloso }}</p>
-  </div>
-</mat-dialog-content>
+<div class="export-buttons">
+  <br>
+  <button class = "buttons" (click)="exportarMarkdown()">Exportar para .MD</button>
+  <button class = "buttons" (click)="exportarPDF()">Exportar para PDF</button>
+  <br>
+</div>
 
-<mat-dialog-actions>
-  <button class="button-dialog" mat-button (click)="fechar()">Fechar</button>
-  <button class="button-dialog" mat-raised-button color="primary" (click)="exportarPDF()">
-    Exportar para PDF
-  </button>
-</mat-dialog-actions>
+
+<div class="footer">
+  <br>
+</div> 

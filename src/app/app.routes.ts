@@ -9,13 +9,13 @@ import { Production } from './production/production';
 import { General } from './general/general';
 import { Home } from './home/home';
 import { setorGuard } from './guards/setor.guards';
-import { DetailProcess } from './detail.process/detail.process';
+import { VisualizacaoComponent } from './detail.process/detail.process';
 import { AdminGuard } from './guards/admin.guards';
 import { PainelAdmComponent } from './painel-adm/painel-adm.component';
 
 
 export const routes: Routes = [
-    { path: 'detail-process', component: DetailProcess, canActivate: [setorGuard], data: { setor: 'geral' }},
+    { path: 'detail-process', component: VisualizacaoComponent, canActivate: [setorGuard], data: { setor: 'geral' }},
     { path: 'home', component: Home },
     { path: 'sign-up', component: SignUp, canActivate: [setorGuard], data: { setor: 'geral' }},
     { path: 'login', component: Login },
