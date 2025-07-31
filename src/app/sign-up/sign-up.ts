@@ -62,7 +62,6 @@ export class SignUp implements OnInit {
 
   ngOnInit(): void {
   const setorLogado = this.auth.getSetor()?.toLowerCase().trim();
-  // const roleLogado = this.auth.getRole();
 
   // Corrige dropdown — apenas "geral" + setor do usuário
   this.setores = ['geral'];
