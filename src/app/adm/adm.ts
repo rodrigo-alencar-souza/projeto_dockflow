@@ -11,6 +11,7 @@ import { FormsModule } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { DeleteConfirmationComponent } from '../delete-confirmation/delete-confirmation';
 import { MatDialogModule } from '@angular/material/dialog';
+import { ChangeDetectorRef } from '@angular/core';
 
 
 interface Process {
@@ -43,7 +44,7 @@ interface User {
   styleUrls: ['./adm.scss']
 })
 export class Adm {
-  constructor(private snackBar: MatSnackBar, private dialog: MatDialog) {}
+  constructor(private snackBar: MatSnackBar, private dialog: MatDialog, private cdr: ChangeDetectorRef, ) {}
 
   userData: User[] = [
     { name: 'Carlos Lima', general: true, engineering: false, production: true },
@@ -104,6 +105,7 @@ export class Adm {
       if (result) {
         this.approvedUsers = this.approvedUsers.filter(u => u !== user);
         this.snackBar.open(`🗑️ ${user.name} foi removido com sucesso`, 'Fechar', { duration: 3000 });
+        this.cdr.detectChanges(); // 💥 força o Angular a re-renderizar a view
       }
     });
 }
