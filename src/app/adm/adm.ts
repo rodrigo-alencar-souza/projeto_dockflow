@@ -8,6 +8,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { FormsModule } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
+import { DeleteConfirmationComponent } from '../delete-confirmation/delete-confirmation';
+import { MatDialogModule } from '@angular/material/dialog';
+
 
 interface Process {
   name: string;
@@ -31,13 +35,16 @@ interface User {
     MatIconModule,
     MatToolbarModule,
     MatSnackBarModule,
-    FormsModule
+    FormsModule,
+    MatDialogModule,
+    DeleteConfirmationComponent
   ],
+  standalone: true,
   templateUrl: './adm.html',
   styleUrls: ['./adm.scss']
 })
 export class Adm {
-  constructor(private snackBar: MatSnackBar) {}
+  constructor(private snackBar: MatSnackBar, private dialog: MatDialog) {}
 
   userData: User[] = [
     { name: 'Carlos Lima', general: true, engineering: false, production: true },
@@ -89,11 +96,18 @@ export class Adm {
   }
 
   confirmDelete(user: User): void {
-    const confirm = window.confirm(`Deseja realmente remover ${user.name}?`);
+    const dialogRef = this.dialog.open(DeleteConfirmationComponent, {
+      width: '350px',
+      data: { name: user.name }
+    });
 
-    if (confirm) {
-      this.approvedUsers = this.approvedUsers.filter(u => u !== user);
-      this.snackBar.open(`🗑️ ${user.name} foi removido com sucesso`, 'Fechar', { duration: 3000 });
-    }
-  }
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.approvedUsers = this.approvedUsers.filter(u => u !== user);
+        this.snackBar.open(`🗑️ ${user.name} foi removido com sucesso`, 'Fechar', { duration: 3000 });
+      }
+    });
+}
+
+  
 }
