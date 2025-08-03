@@ -16,21 +16,21 @@
       <ng-container matColumnDef="general">
         <th mat-header-cell *matHeaderCellDef>General</th>
         <td mat-cell *matCellDef="let element">
-          <mat-checkbox [checked]="element.general" disabled></mat-checkbox>
+          <mat-checkbox [(ngModel)]="element.general" ></mat-checkbox>
         </td>
       </ng-container>
 
       <ng-container matColumnDef="engineering">
         <th mat-header-cell *matHeaderCellDef>Engineering</th>
         <td mat-cell *matCellDef="let element">
-          <mat-checkbox [checked]="element.engineering" disabled></mat-checkbox>
+          <mat-checkbox [(ngModel)]="element.engineering" ></mat-checkbox>
         </td>
       </ng-container>
 
       <ng-container matColumnDef="production">
         <th mat-header-cell *matHeaderCellDef>Production</th>
         <td mat-cell *matCellDef="let element">
-          <mat-checkbox [checked]="element.production" disabled></mat-checkbox>
+          <mat-checkbox [(ngModel)]="element.production" ></mat-checkbox>
         </td>
       </ng-container>
 
@@ -80,4 +80,53 @@
       <tr mat-row *matRowDef="let row; columns: processDisplayedColumns;"></tr>
     </table>
   </mat-card>
+
+  <!-- Approved Users Section -->
+  <mat-card class="section-card" *ngIf="approvedUsers.length > 0">
+    <h2>Usuários Aprovados</h2>
+    <table mat-table [dataSource]="approvedUsers" class="approval-table">
+
+      <!-- User Column -->
+      <ng-container matColumnDef="user">
+        <th mat-header-cell *matHeaderCellDef>Usuário</th>
+        <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+      </ng-container>
+
+      <!-- Sector Columns -->
+      <ng-container matColumnDef="general">
+        <th mat-header-cell *matHeaderCellDef>Geral</th>
+        <td mat-cell *matCellDef="let element">
+          <mat-checkbox [(ngModel)]="element.general" ></mat-checkbox>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="engineering">
+        <th mat-header-cell *matHeaderCellDef>Engenharia</th>
+        <td mat-cell *matCellDef="let element">
+          <mat-checkbox [(ngModel)]="element.engineering" ></mat-checkbox>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="production">
+        <th mat-header-cell *matHeaderCellDef>Produção</th>
+        <td mat-cell *matCellDef="let element">
+          <mat-checkbox [(ngModel)]="element.production" ></mat-checkbox>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="approvedUserColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: approvedUserColumns;"></tr>
+
+      <ng-container matColumnDef="action">
+        <th mat-header-cell *matHeaderCellDef>Ação</th>
+        <td mat-cell *matCellDef="let element">
+          <button mat-icon-button color="warn" (click)="confirmDelete(element)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+    </table>
+  </mat-card>
+
+
 </div>

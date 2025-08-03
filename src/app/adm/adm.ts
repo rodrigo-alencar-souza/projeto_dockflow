@@ -1,14 +1,13 @@
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatTableModule } from '@angular/material/table';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { CommonModule } from '@angular/common';
-// import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
-
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { FormsModule } from '@angular/forms';
 
 interface Process {
   name: string;
@@ -23,23 +22,22 @@ interface User {
 
 @Component({
   selector: 'app-adm',
-  imports: [CommonModule,
-    // BrowserAnimationsModule, // Essencial para animações do Material
+  imports: [
+    CommonModule,
     MatCardModule,
     MatTableModule,
     MatCheckboxModule,
     MatButtonModule,
     MatIconModule,
-    MatToolbarModule
-],
+    MatToolbarModule,
+    MatSnackBarModule,
+    FormsModule
+  ],
   templateUrl: './adm.html',
-  styleUrl: './adm.scss'
+  styleUrls: ['./adm.scss']
 })
 export class Adm {
-
-  
-
-
+  constructor(private snackBar: MatSnackBar) {}
 
   userData: User[] = [
     { name: 'Carlos Lima', general: true, engineering: false, production: true },
@@ -47,6 +45,7 @@ export class Adm {
     { name: 'Felipe Rocha', general: true, engineering: true, production: true }
   ];
 
+  approvedUsers: User[] = [];
   processData: Process[] = [
     { name: 'Processo A' },
     { name: 'Processo B' },
@@ -54,25 +53,47 @@ export class Adm {
   ];
 
   userDisplayedColumns: string[] = ['user', 'general', 'engineering', 'production', 'status'];
+  approvedUserColumns: string[] = ['user', 'general', 'engineering', 'production', 'action'];
   processDisplayedColumns: string[] = ['process', 'status'];
 
   approveUser(user: User): void {
-    console.log(`Usuário aprovado: ${user.name}`);
-    // Aqui você pode integrar com sua API ou alterar o estado local
+    if (!user.general && !user.engineering && !user.production) {
+      this.snackBar.open(`⚠️ Selecione ao menos uma permissão para ${user.name}`, 'Fechar', { duration: 3000 });
+      return;
+    }
+
+    this.snackBar.open(`✅ ${user.name} aprovado com permissões`, 'Fechar', { duration: 3000 });
+    this.userData = this.userData.filter(u => u !== user);
+    this.approvedUsers = [...this.approvedUsers, user];
   }
 
   rejectUser(user: User): void {
     console.log(`Usuário rejeitado: ${user.name}`);
-    // Idem
+    this.snackBar.open(`❌ ${user.name} rejeitado.`, 'Fechar', { duration: 3000 });
+
+    this.userData = this.userData.filter(u => u !== user);
   }
 
   approveProcess(process: Process): void {
     console.log(`Processo aprovado: ${process.name}`);
+    this.snackBar.open(`✅ ${process.name} aprovado!`, 'Fechar', { duration: 3000 });
+
+    this.processData = this.processData.filter(p => p !== process);
   }
 
   rejectProcess(process: Process): void {
     console.log(`Processo rejeitado: ${process.name}`);
+    this.snackBar.open(`❌ ${process.name} rejeitado.`, 'Fechar', { duration: 3000 });
+
+    this.processData = this.processData.filter(p => p !== process);
+  }
+
+  confirmDelete(user: User): void {
+    const confirm = window.confirm(`Deseja realmente remover ${user.name}?`);
+
+    if (confirm) {
+      this.approvedUsers = this.approvedUsers.filter(u => u !== user);
+      this.snackBar.open(`🗑️ ${user.name} foi removido com sucesso`, 'Fechar', { duration: 3000 });
+    }
   }
 }
-
-
