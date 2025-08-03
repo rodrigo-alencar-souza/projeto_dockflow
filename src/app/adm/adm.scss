@@ -1,0 +1,79 @@
+::ng-deep .mat-checkbox .mat-checkbox-frame {
+  border-color: white !important;
+}
+
+::ng-deep .mat-checkbox-checked .mat-checkbox-background,
+::ng-deep .mat-checkbox-indeterminate .mat-checkbox-background {
+  background-color: transparent !important;
+}
+
+.admin-dashboard {
+  background-color: #16161d;
+  color: #fff;
+  padding: 24px;
+
+  h1 {
+    color: #a50034;
+    font-weight: bold;
+    font-size: 32px;
+    margin-bottom: 24px;
+  }
+
+  .section-card {
+    background-color: #121212;
+    border: 2px solid #a50034;
+    margin-bottom: 32px;
+    padding: 16px;
+    border-radius: 8px;
+
+    h2 {
+      color: #fff;
+      margin-bottom: 16px;
+      font-size: 20px;
+    }
+
+    .approval-table {
+      width: 100%;
+      th {
+        background-color: #16161d;
+        color: #a50034;
+        font-weight: bold;
+      }
+      tr{
+        color: #222222;
+
+      }
+      td {
+        background-color: #121212;
+        color: white;
+
+        mat-checkbox {
+          color: #222222;
+          border-color: #fff;
+          border: #fff;
+
+          &mat-checkbox-frame {
+            border-color: white !important;
+        }
+      }
+    }
+
+
+      mat-icon {
+        font-size: 24px;
+      }
+
+      button {
+        margin-right: 8px;
+      }
+      .aproved-button{
+        color: darkseagreen;
+
+      }
+      .reproved-button{
+        color: #a50034;
+        
+      }
+    }
+  }
+}

@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { Sidebar } from './sidebar/sidebar';
+import { Adm } from './adm/adm';
 import { Login } from './login/login';
 import { SignUp } from './sign-up/sign-up';
 import { UserSignUp } from './user-sign-up/user-sign-up';
@@ -19,7 +19,8 @@ export const routes: Routes = [
     { path: 'home', component: Home },
     { path: 'sign-up', component: SignUp, canActivate: [setorGuard], data: { setor: 'geral' }},
     { path: 'login', component: Login },
-    { path: 'painel-adm', component: PainelAdmComponent, canActivate: [AdminGuard] },
+    // { path: 'painel-adm', component: PainelAdmComponent, canActivate: [AdminGuard] },
+    { path: 'painel-adm', component: Adm, canActivate: [AdminGuard] },
     { path: 'cadastro-usuario', component: UserSignUp},
     { path: 'cadastro-processo', component: SignUp },
     {path: 'editar-processo/:index', component: SignUp},

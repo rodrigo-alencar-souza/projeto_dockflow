@@ -10,6 +10,7 @@ import Quote from '@editorjs/quote';
 import CodeTool from '@editorjs/code';
 import Table from '@editorjs/table';
 import Delimiter from '@editorjs/delimiter';
+import { Sidebar } from '../sidebar/sidebar';
 
 
 
@@ -17,6 +18,8 @@ import Delimiter from '@editorjs/delimiter';
 
 @Component({
   selector: 'app-visualizacao',
+  standalone: true,
+  imports:[Sidebar],
   templateUrl: './detail.process.html',
   styleUrls: ['./detail.process.scss']
 })
