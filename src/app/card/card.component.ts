@@ -11,7 +11,9 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { AuthService } from '../service/auth.service';
 import { PerfilUsuario } from '../service/auth.service';
-
+import { DeleteConfirmationComponent } from '../delete-confirmation/delete-confirmation';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { ChangeDetectorRef } from '@angular/core';
 
 
 @Component({
@@ -22,7 +24,7 @@ import { PerfilUsuario } from '../service/auth.service';
     MatCardModule,
     MatButtonModule,
     MatMenuModule,
-    MatIconModule
+    MatIconModule,
   ],
   templateUrl: './card.component.html',
   styleUrls: ['./card.component.scss']
@@ -37,7 +39,10 @@ export class CardComponent implements OnInit {
     private processoService: ProcessoService,
     private router: Router,
     private route: ActivatedRoute,
-    public auth: AuthService
+    public auth: AuthService,
+    private dialog: MatDialog,         // ✅ MatDialog aqui
+    private snackBar: MatSnackBar,
+    private cdr: ChangeDetectorRef,     
   ) {}
 
   ngOnInit(): void {
@@ -90,10 +95,29 @@ export class CardComponent implements OnInit {
   }
 
   excluirProcesso(index: number): void {
-    const processoVisivel = this.processosPorSetor[index];
-    const indexGlobal = this.processoService.getIndiceGlobal(processoVisivel);
-    this.processoService.removerProcesso(indexGlobal);
+    const dialogRef = this.dialog.open(DeleteConfirmationComponent, {
+      width: '300px'
+    });
+
+    dialogRef.afterClosed().subscribe((confirmed: boolean) => {
+      if (confirmed) {
+        const processoVisivel = this.processosPorSetor[index];
+        const indexGlobal = this.processoService.getIndiceGlobal(processoVisivel);
+
+        this.processoService.removerProcesso(indexGlobal);
+
+        this.processosPorSetor.splice(index, 1);
+        this.processosPorSetor = [...this.processosPorSetor]; // 🔄 força nova referência
+        this.cdr.detectChanges(); // 💥 força o Angular a re-renderizar a view
+
+
+        this.snackBar.open('Processo excluído com sucesso', 'Fechar', {
+          duration: 3000
+        });
+      }
+    });
   }
+
 
   Process_button_navigate(): void {
     this.processoService.clearEdicao();

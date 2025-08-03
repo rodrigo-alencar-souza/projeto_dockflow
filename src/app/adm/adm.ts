@@ -37,7 +37,6 @@ interface User {
     MatSnackBarModule,
     FormsModule,
     MatDialogModule,
-    DeleteConfirmationComponent
   ],
   standalone: true,
   templateUrl: './adm.html',
