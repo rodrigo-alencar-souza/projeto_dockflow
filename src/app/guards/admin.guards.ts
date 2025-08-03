@@ -7,11 +7,16 @@ export class AdminGuard implements CanActivate {
   constructor(private authService: AuthService, private router: Router) {}
 
   canActivate(): boolean {
-    if (this.authService.isAdmin()) {
-      return true;
-    } else {
-      this.router.navigate(['/acesso-negado']); // ou alguma rota genérica
+    if (!this.authService.isAuthenticated()) {
+      this.router.navigate(['/login']); // 🔐 redireciona se não estiver logado
       return false;
     }
+
+    if (this.authService.isAdmin()) {
+      return true; // ✅ admin autenticado: acesso permitido
+    }
+
+    this.router.navigate(['/acesso-negado']); // 🚫 logado mas sem permissão
+    return false;
   }
 }
