@@ -4,6 +4,7 @@ from app.db.models.models import SectorEnum, RoleEnum, StatusEnum
 
 class UserBase(BaseModel):
     nome: str
+    idade: int
     setor: SectorEnum
     cargo: str
     email: EmailStr

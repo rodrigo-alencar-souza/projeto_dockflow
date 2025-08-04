@@ -6,7 +6,7 @@ from app.db.deps import get_db
 from app.db.models.models import Activity
 from app.schemas.process import ActivityCreate, ActivityOut, ActivityUpdate
 
-router = APIRouter(prefix="/activities", tags=["activities"])
+router = APIRouter(prefix="/process", tags=["process"])
 
 @router.post("/", response_model=ActivityOut)
 def create_activity(activity: ActivityCreate, db: Session = Depends(get_db)):
@@ -32,7 +32,7 @@ def atualizar_formulario(
     if not formulario:
         raise HTTPException(status_code=404, detail="Formulário não encontrado")
 
-    for attr, value in update_data.dict(exclude_unset=True).items():
+    for attr, value in update_data.model_dump(exclude_unset=True).items():
         setattr(formulario, attr, value)
 
     db.commit()

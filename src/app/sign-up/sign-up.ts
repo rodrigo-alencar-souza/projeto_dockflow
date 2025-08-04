@@ -19,6 +19,7 @@ import { ProcessoService } from '../service/process.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Processo } from '../models/processo.model';
 import { AuthService } from '../service/auth.service';
+import { ApiProcessService } from '../service/api.process.service';
 
 @Component({
   selector: 'app-sign-up',
@@ -55,6 +56,7 @@ export class SignUp implements OnInit {
   constructor(
     private snackBar: MatSnackBar,
     private processoService: ProcessoService,
+    private apiprocessService: ApiProcessService,
     private auth: AuthService,
     private router: Router,
     private fb: FormBuilder
@@ -84,7 +86,6 @@ export class SignUp implements OnInit {
       processo: ['', Validators.required],
       descricao: [''],
       passos: [''],
-      sigiloso: ['nao', Validators.required]
     });
 
     this.indexEdicao = this.processoService.getIndiceEdicao();
@@ -110,6 +111,30 @@ export class SignUp implements OnInit {
 
   onSubmit(): void {
     if (this.registerForm.invalid) return;
+
+    const dadosProcesso = this.registerForm.value;
+    dadosProcesso.setor = dadosProcesso.setor.toLowerCase();
+    dadosProcesso.cargo = dadosProcesso.cargo.toLowerCase();
+    dadosProcesso.nome = dadosProcesso.nome.toLowerCase();
+    dadosProcesso.descricao = dadosProcesso.descricao.toLowerCase();
+    dadosProcesso.passos = dadosProcesso.passos.toLowerCase();
+
+    const jsonPayload = JSON.stringify(dadosProcesso);
+
+
+
+       console.log('Dados do formulário:', jsonPayload); // Aqui você pode enviar os dados para um serviço ou backend } } } 
+
+
+    this.apiprocessService.postDados(dadosProcesso).subscribe({
+      next: (resposta) => {
+        console.log('Processo cadastrado com sucesso:', resposta);
+        this.router.navigate(['home']); // redireciona após cadastro
+      },
+      error: (erro) => {
+        console.error('Erro ao cadastrar usuário:', erro);
+      }
+    });
 
     const sigiloso = this.registerForm.value.sigiloso === 'sim';
 

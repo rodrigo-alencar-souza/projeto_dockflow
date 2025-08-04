@@ -25,6 +25,7 @@ class User(Base):
 
     id          = Column(Integer, primary_key=True, index=True)
     nome        = Column(String, nullable=False)
+    idade       = Column(Integer, nullable=False)
     setor       = Column(SAEnum(SectorEnum), nullable=False)
     cargo       = Column(String, nullable=False)
     email       = Column(String, unique=True, index=True, nullable=False)
@@ -38,9 +39,10 @@ class Activity(Base):
     __tablename__ = "process"
 
     id          = Column(Integer, primary_key=True, index=True)
-    colaborador = Column(String, nullable=False)
+    nome        = Column(String, nullable=False)
     setor       = Column(SAEnum(SectorEnum), nullable=False)
     cargo       = Column(String, nullable=False)
+    processo    = Column(String, nullable=False)
     descricao   = Column(String, nullable=False)
-    passos      = Column(ARRAY(String), default=[])
+    passos      = Column(String, default="")
  
