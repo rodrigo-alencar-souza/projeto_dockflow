@@ -35,7 +35,7 @@ class User(Base):
     permissions = Column(ARRAY(String), default=[])
     
     
-class Activity(Base):
+class Process(Base):
     __tablename__ = "process"
 
     id          = Column(Integer, primary_key=True, index=True)
@@ -45,4 +45,5 @@ class Activity(Base):
     processo    = Column(String, nullable=False)
     descricao   = Column(String, nullable=False)
     passos      = Column(String, default="")
+    status      = Column(SAEnum(StatusEnum), default=StatusEnum.pending, nullable=False)
  

@@ -1,28 +1,37 @@
-# app/schemas/activity.py
-
-from typing import List
+from enum import Enum
+from typing import Optional
 from pydantic import BaseModel, ConfigDict
 from app.db.models.models import SectorEnum
 
-class ActivityCreate(BaseModel):
+class StatusEnum(str, Enum):
+    pending  = "pending"
+    approved = "approved"
+
+class ProcessCreate(BaseModel):
     nome: str
     setor: SectorEnum
     cargo: str
     processo: str
     descricao: str
     passos: str
+
+
     
 
-class ActivityUpdate(BaseModel):
+class ProcessUpdate(BaseModel):
     nome: str | None = None
     setor: str | None = None
     cargo: str | None = None
     processo: str | None = None
     descricao: str | None = None
     passos: str | None = None
+    status: Optional[StatusEnum]
+
+
     
 
-class ActivityOut(ActivityCreate):
+class ProcessOut(ProcessCreate):
     id: int
+    status: StatusEnum
 
     model_config = ConfigDict(from_attributes=True)
