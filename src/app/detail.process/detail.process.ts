@@ -1,23 +1,41 @@
 import { Component, OnInit, AfterViewInit, Inject } from '@angular/core';
-import { ProcessoService } from '../service/process.service';
 import { isPlatformBrowser } from '@angular/common';
 import { PLATFORM_ID } from '@angular/core';
+import { ProcessoService } from '../service/process.service';
 import { Sidebar } from '../sidebar/sidebar';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmSaveComponent } from '../confirm-save/confirm-save';
+import { CommonModule } from '@angular/common';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
+import { lastValueFrom } from 'rxjs';
+
 
 @Component({
-  selector: 'app-visualizacao',
+  selector: 'app-detail-process',
   standalone: true,
-  imports: [Sidebar],
+  imports: [
+    Sidebar,
+    CommonModule,
+    MatSnackBarModule,
+    MatDialogModule,
+    ConfirmSaveComponent,
+    MatButtonModule
+  ],
   templateUrl: './detail.process.html',
   styleUrls: ['./detail.process.scss']
 })
 export class VisualizacaoComponent implements OnInit, AfterViewInit {
-  editor: any;
   processo: any;
+  editor: any;
 
   constructor(
     private processoService: ProcessoService,
-    @Inject(PLATFORM_ID) private platformId: Object
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private snackBar: MatSnackBar,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -48,7 +66,7 @@ export class VisualizacaoComponent implements OnInit, AfterViewInit {
       import('@editorjs/table'),
       import('@editorjs/delimiter'),
       import('@editorjs/checklist'),
-      import('@editorjs/image'),
+      import('@editorjs/image')
     ]);
 
     const processoId = this.processo?.id || 'default';
@@ -66,6 +84,7 @@ export class VisualizacaoComponent implements OnInit, AfterViewInit {
         table: Table,
         delimiter: Delimiter,
         checklist: Checklist,
+        image: ImageTool
       },
       data: parsedData || {
         blocks: [
@@ -106,11 +125,20 @@ export class VisualizacaoComponent implements OnInit, AfterViewInit {
   }
 
   async salvarEdicao(): Promise<void> {
-    if (!this.editor) return;
-    const content = await this.editor.save();
-    const processoId = this.processo?.id || 'default';
-    localStorage.setItem(`editorjs_${processoId}`, JSON.stringify(content));
-    alert('Alterações salvas com sucesso!');
+    const dialogRef = this.dialog.open(ConfirmSaveComponent, {
+      width: '350px'
+    });
+
+    const result = await lastValueFrom(dialogRef.afterClosed());
+
+    if (result && this.editor) {
+      const content = await this.editor.save();
+      const processoId = this.processo?.id || 'default';
+      localStorage.setItem(`editorjs_${processoId}`, JSON.stringify(content));
+      this.snackBar.open('✅ Alterações salvas com sucesso!', 'Fechar', {
+        duration: 3000
+      });
+    }
   }
 
   async exportarPDF(): Promise<void> {
@@ -119,6 +147,7 @@ export class VisualizacaoComponent implements OnInit, AfterViewInit {
     const { jsPDF } = await import('jspdf');
     const doc = new jsPDF('p', 'mm', 'a4');
     const margin = 20;
+    const pageHeight = doc.internal.pageSize.getHeight();
     const pageWidth = doc.internal.pageSize.getWidth();
     const maxLineWidth = pageWidth - margin * 2;
     const lineHeight = 7;
@@ -127,6 +156,13 @@ export class VisualizacaoComponent implements OnInit, AfterViewInit {
     const content = await this.editor.save();
 
     for (const block of content.blocks) {
+      const ensureSpace = (requiredHeight: number) => {
+        if (currentHeight + requiredHeight > pageHeight - margin) {
+          doc.addPage();
+          currentHeight = margin;
+        }
+      };
+
       switch (block.type) {
         case 'header': {
           const text = block.data.text || '';
@@ -135,10 +171,7 @@ export class VisualizacaoComponent implements OnInit, AfterViewInit {
           doc.setFontSize(fontSize);
           doc.setFont('helvetica', 'bold');
           const lines = doc.splitTextToSize(text, maxLineWidth);
-          if (currentHeight + lines.length * lineHeight > doc.internal.pageSize.getHeight() - margin) {
-            doc.addPage();
-            currentHeight = margin;
-          }
+          ensureSpace(lines.length * lineHeight + 5);
           doc.text(lines, margin, currentHeight);
           currentHeight += lines.length * lineHeight + 5;
           break;
@@ -149,6 +182,7 @@ export class VisualizacaoComponent implements OnInit, AfterViewInit {
           doc.setFontSize(12);
           doc.setFont('helvetica', 'normal');
           const lines = doc.splitTextToSize(text, maxLineWidth);
+          ensureSpace(lines.length * lineHeight + 5);
 
           for (let i = 0; i < lines.length; i++) {
             const line = lines[i];
@@ -175,7 +209,6 @@ export class VisualizacaoComponent implements OnInit, AfterViewInit {
         case 'list': {
           const items: string[] = block.data.items || [];
           const style = block.data.style;
-
           doc.setFontSize(12);
           doc.setFont('helvetica', 'normal');
 
@@ -183,13 +216,11 @@ export class VisualizacaoComponent implements OnInit, AfterViewInit {
             const prefix = style === 'ordered' ? `${i + 1}. ` : '• ';
             const itemText = typeof items[i] === 'string' ? items[i] : JSON.stringify(items[i]);
             const lines = doc.splitTextToSize(prefix + itemText, maxLineWidth);
-            if (currentHeight + lines.length * lineHeight > doc.internal.pageSize.getHeight() - margin) {
-              doc.addPage();
-              currentHeight = margin;
-            }
+            ensureSpace(lines.length * lineHeight + 5);
             doc.text(lines, margin, currentHeight);
-            currentHeight += lines.length * lineHeight;
+            currentHeight += lines.length * lineHeight + 2;
           }
+
           currentHeight += 5;
           break;
         }
@@ -201,12 +232,9 @@ export class VisualizacaoComponent implements OnInit, AfterViewInit {
           for (const item of items) {
             const checkbox = item.checked ? '[x] ' : '[ ] ';
             const lines = doc.splitTextToSize(checkbox + item.text, maxLineWidth);
-            if (currentHeight + lines.length * lineHeight > doc.internal.pageSize.getHeight() - margin) {
-              doc.addPage();
-              currentHeight = margin;
-            }
+            ensureSpace(lines.length * lineHeight + 5);
             doc.text(lines, margin, currentHeight);
-            currentHeight += lines.length * lineHeight;
+            currentHeight += lines.length * lineHeight + 2;
           }
           currentHeight += 5;
           break;
@@ -218,14 +246,17 @@ export class VisualizacaoComponent implements OnInit, AfterViewInit {
           doc.setFontSize(14);
           doc.setFont('helvetica', 'italic');
           const quoteLines = doc.splitTextToSize(`"${text}"`, maxLineWidth);
+          ensureSpace(quoteLines.length * lineHeight + 10);
           doc.text(quoteLines, margin + 10, currentHeight);
           currentHeight += quoteLines.length * lineHeight;
 
           if (caption) {
             const capLines = doc.splitTextToSize(`— ${caption}`, maxLineWidth);
+            ensureSpace(capLines.length * lineHeight + 5);
             doc.text(capLines, margin + 20, currentHeight);
             currentHeight += capLines.length * lineHeight;
           }
+
           currentHeight += 5;
           break;
         }
@@ -236,6 +267,7 @@ export class VisualizacaoComponent implements OnInit, AfterViewInit {
           doc.setFontSize(10);
           const codeLines = doc.splitTextToSize(codeText, maxLineWidth);
           const blockHeight = codeLines.length * lineHeight + 4;
+          ensureSpace(blockHeight + 5);
           doc.setFillColor(230, 230, 230);
           doc.rect(margin - 2, currentHeight - lineHeight + 2, maxLineWidth + 4, blockHeight, 'F');
           doc.setTextColor(30, 30, 30);
@@ -261,9 +293,17 @@ export class VisualizacaoComponent implements OnInit, AfterViewInit {
             for (let col = 0; col < colCount; col++) {
               const cellText = content[row][col] || '';
               const lines = doc.splitTextToSize(cellText, colWidth - 4);
-              doc.rect(margin + col * colWidth, tableTop, colWidth, lines.length * lineHeight);
+              const estimatedHeight = lines.length * lineHeight;
+
+              if (tableTop + estimatedHeight > pageHeight - margin) {
+                doc.addPage();
+                tableTop = margin;
+                currentHeight = margin;
+              }
+
+              doc.rect(margin + col * colWidth, tableTop, colWidth, estimatedHeight);
               doc.text(lines, margin + col * colWidth + 2, tableTop + lineHeight);
-              rowHeight = Math.max(rowHeight, lines.length * lineHeight);
+              rowHeight = Math.max(rowHeight, estimatedHeight);
             }
             tableTop += rowHeight;
           }
@@ -278,10 +318,7 @@ export class VisualizacaoComponent implements OnInit, AfterViewInit {
           if (url) {
             try {
               const imgProps = await this.getImageProps(url);
-              if (currentHeight + imgProps.height > doc.internal.pageSize.getHeight() - margin) {
-                doc.addPage();
-                currentHeight = margin;
-              }
+              ensureSpace(imgProps.height + 5);
               doc.addImage(url, imgProps.format, margin, currentHeight, imgProps.width, imgProps.height);
               currentHeight += imgProps.height + 5;
             } catch {
@@ -296,6 +333,7 @@ export class VisualizacaoComponent implements OnInit, AfterViewInit {
           doc.setFontSize(12);
           doc.setFont('helvetica', 'normal');
           const lines = doc.splitTextToSize(text, maxLineWidth);
+          ensureSpace(lines.length * lineHeight + 5);
           doc.text(lines, margin, currentHeight);
           currentHeight += lines.length * lineHeight + 5;
         }
@@ -304,6 +342,7 @@ export class VisualizacaoComponent implements OnInit, AfterViewInit {
 
     doc.save('processo.pdf');
   }
+
 
   private getImageProps(url: string): Promise<{ width: number; height: number; format: string }> {
     return new Promise((resolve, reject) => {

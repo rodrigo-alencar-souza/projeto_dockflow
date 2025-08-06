@@ -12,6 +12,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { DeleteConfirmationComponent } from '../delete-confirmation/delete-confirmation';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ChangeDetectorRef } from '@angular/core';
+import { Sidebar } from '../sidebar/sidebar';
 
 
 interface Process {
@@ -38,6 +39,7 @@ interface User {
     MatSnackBarModule,
     FormsModule,
     MatDialogModule,
+    Sidebar
   ],
   standalone: true,
   templateUrl: './adm.html',
