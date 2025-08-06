@@ -25,12 +25,8 @@ export class VisualizacaoComponent implements OnInit, AfterViewInit {
   }
 
   async ngAfterViewInit(): Promise<void> {
-    if (!isPlatformBrowser(this.platformId)) {
-      // Se não for browser, não tenta criar editor
-      return;
-    }
+    if (!isPlatformBrowser(this.platformId)) return;
 
-    // Importa EditorJS e plugins dinamicamente só no browser
     const [
       { default: EditorJS },
       { default: Header },
@@ -55,6 +51,10 @@ export class VisualizacaoComponent implements OnInit, AfterViewInit {
       import('@editorjs/image'),
     ]);
 
+    const processoId = this.processo?.id || 'default';
+    const savedData = localStorage.getItem(`editorjs_${processoId}`);
+    const parsedData = savedData ? JSON.parse(savedData) : null;
+
     this.editor = new EditorJS({
       holder: 'editorjs',
       tools: {
@@ -66,17 +66,8 @@ export class VisualizacaoComponent implements OnInit, AfterViewInit {
         table: Table,
         delimiter: Delimiter,
         checklist: Checklist,
-        image: {
-          class: ImageTool,
-          config: {
-            endpoints: {
-              byFile: 'http://localhost:3000/uploadFile',
-              byUrl: 'http://localhost:3000/fetchUrl',
-            }
-          }
-        }
       },
-      data: {
+      data: parsedData || {
         blocks: [
           {
             type: 'header',
@@ -114,11 +105,18 @@ export class VisualizacaoComponent implements OnInit, AfterViewInit {
     });
   }
 
+  async salvarEdicao(): Promise<void> {
+    if (!this.editor) return;
+    const content = await this.editor.save();
+    const processoId = this.processo?.id || 'default';
+    localStorage.setItem(`editorjs_${processoId}`, JSON.stringify(content));
+    alert('Alterações salvas com sucesso!');
+  }
+
   async exportarPDF(): Promise<void> {
     if (!isPlatformBrowser(this.platformId)) return;
 
     const { jsPDF } = await import('jspdf');
-
     const doc = new jsPDF('p', 'mm', 'a4');
     const margin = 20;
     const pageWidth = doc.internal.pageSize.getWidth();
@@ -133,7 +131,7 @@ export class VisualizacaoComponent implements OnInit, AfterViewInit {
         case 'header': {
           const text = block.data.text || '';
           const level = block.data.level || 1;
-          const fontSize = 24 - (level * 4); // Tamanho menor para níveis maiores
+          const fontSize = 24 - (level * 4);
           doc.setFontSize(fontSize);
           doc.setFont('helvetica', 'bold');
           const lines = doc.splitTextToSize(text, maxLineWidth);
@@ -151,25 +149,40 @@ export class VisualizacaoComponent implements OnInit, AfterViewInit {
           doc.setFontSize(12);
           doc.setFont('helvetica', 'normal');
           const lines = doc.splitTextToSize(text, maxLineWidth);
-          if (currentHeight + lines.length * lineHeight > doc.internal.pageSize.getHeight() - margin) {
-            doc.addPage();
-            currentHeight = margin;
+
+          for (let i = 0; i < lines.length; i++) {
+            const line = lines[i];
+            const isLastLine = i === lines.length - 1;
+            const words = line.trim().split(/\s+/);
+            const wordWidths = words.map((word: string) => doc.getTextWidth(word));
+            const totalWordsWidth = wordWidths.reduce((a: number, b: number) => a + b, 0);
+            const spaceCount = words.length - 1;
+            const remainingSpace = maxLineWidth - totalWordsWidth;
+            const spaceWidth = spaceCount > 0 ? (isLastLine ? 3 : remainingSpace / spaceCount) : 0;
+
+            let x = margin;
+            for (let j = 0; j < words.length; j++) {
+              doc.text(words[j], x, currentHeight);
+              x += wordWidths[j] + spaceWidth;
+            }
+            currentHeight += lineHeight;
           }
-          doc.text(lines, margin, currentHeight);
-          currentHeight += lines.length * lineHeight + 5;
+
+          currentHeight += 5;
           break;
         }
 
         case 'list': {
-          const items = block.data.items || [];
-          const style = block.data.style; // 'ordered' ou 'unordered'
+          const items: string[] = block.data.items || [];
+          const style = block.data.style;
 
           doc.setFontSize(12);
           doc.setFont('helvetica', 'normal');
 
           for (let i = 0; i < items.length; i++) {
             const prefix = style === 'ordered' ? `${i + 1}. ` : '• ';
-            const lines = doc.splitTextToSize(prefix + items[i], maxLineWidth);
+            const itemText = typeof items[i] === 'string' ? items[i] : JSON.stringify(items[i]);
+            const lines = doc.splitTextToSize(prefix + itemText, maxLineWidth);
             if (currentHeight + lines.length * lineHeight > doc.internal.pageSize.getHeight() - margin) {
               doc.addPage();
               currentHeight = margin;
@@ -182,7 +195,7 @@ export class VisualizacaoComponent implements OnInit, AfterViewInit {
         }
 
         case 'checklist': {
-          const items = block.data.items || [];
+          const items: { text: string; checked: boolean }[] = block.data.items || [];
           doc.setFontSize(12);
           doc.setFont('helvetica', 'normal');
           for (const item of items) {
@@ -205,22 +218,15 @@ export class VisualizacaoComponent implements OnInit, AfterViewInit {
           doc.setFontSize(14);
           doc.setFont('helvetica', 'italic');
           const quoteLines = doc.splitTextToSize(`"${text}"`, maxLineWidth);
-          if (currentHeight + quoteLines.length * lineHeight > doc.internal.pageSize.getHeight() - margin) {
-            doc.addPage();
-            currentHeight = margin;
-          }
           doc.text(quoteLines, margin + 10, currentHeight);
           currentHeight += quoteLines.length * lineHeight;
 
           if (caption) {
             const capLines = doc.splitTextToSize(`— ${caption}`, maxLineWidth);
-            if (currentHeight + capLines.length * lineHeight > doc.internal.pageSize.getHeight() - margin) {
-              doc.addPage();
-              currentHeight = margin;
-            }
             doc.text(capLines, margin + 20, currentHeight);
-            currentHeight += capLines.length * lineHeight + 5;
+            currentHeight += capLines.length * lineHeight;
           }
+          currentHeight += 5;
           break;
         }
 
@@ -229,36 +235,25 @@ export class VisualizacaoComponent implements OnInit, AfterViewInit {
           doc.setFont('courier', 'normal');
           doc.setFontSize(10);
           const codeLines = doc.splitTextToSize(codeText, maxLineWidth);
-          if (currentHeight + codeLines.length * lineHeight > doc.internal.pageSize.getHeight() - margin) {
-            doc.addPage();
-            currentHeight = margin;
-          }
-          // Fundo cinza claro para bloco de código
           const blockHeight = codeLines.length * lineHeight + 4;
           doc.setFillColor(230, 230, 230);
           doc.rect(margin - 2, currentHeight - lineHeight + 2, maxLineWidth + 4, blockHeight, 'F');
           doc.setTextColor(30, 30, 30);
           doc.text(codeLines, margin, currentHeight);
           currentHeight += blockHeight + 5;
-          // Restaura cor do texto para preto
           doc.setTextColor(0, 0, 0);
           break;
         }
 
         case 'table': {
-          const content = block.data.content || [];
+          const content: string[][] = block.data.content || [];
           if (content.length === 0) break;
-
-          const colWidths = [];
           const colCount = content[0].length;
-
-          // largura por coluna aproximada
           const colWidth = maxLineWidth / colCount;
 
           doc.setFontSize(12);
           doc.setFont('helvetica', 'normal');
 
-          // altura inicial da tabela
           let tableTop = currentHeight;
 
           for (let row = 0; row < content.length; row++) {
@@ -266,17 +261,13 @@ export class VisualizacaoComponent implements OnInit, AfterViewInit {
             for (let col = 0; col < colCount; col++) {
               const cellText = content[row][col] || '';
               const lines = doc.splitTextToSize(cellText, colWidth - 4);
-              if (tableTop + (lines.length * lineHeight) > doc.internal.pageSize.getHeight() - margin) {
-                doc.addPage();
-                tableTop = margin;
-              }
-              // desenha borda da célula
               doc.rect(margin + col * colWidth, tableTop, colWidth, lines.length * lineHeight);
               doc.text(lines, margin + col * colWidth + 2, tableTop + lineHeight);
               rowHeight = Math.max(rowHeight, lines.length * lineHeight);
             }
             tableTop += rowHeight;
           }
+
           currentHeight = tableTop + 5;
           break;
         }
@@ -294,22 +285,17 @@ export class VisualizacaoComponent implements OnInit, AfterViewInit {
               doc.addImage(url, imgProps.format, margin, currentHeight, imgProps.width, imgProps.height);
               currentHeight += imgProps.height + 5;
             } catch {
-              // se falhar, apenas pula a imagem
+              // erro ao carregar imagem
             }
           }
           break;
         }
 
         default: {
-          // Se tiver outros tipos, tenta só texto plano
           const text = block.data.text || '';
           doc.setFontSize(12);
           doc.setFont('helvetica', 'normal');
           const lines = doc.splitTextToSize(text, maxLineWidth);
-          if (currentHeight + lines.length * lineHeight > doc.internal.pageSize.getHeight() - margin) {
-            doc.addPage();
-            currentHeight = margin;
-          }
           doc.text(lines, margin, currentHeight);
           currentHeight += lines.length * lineHeight + 5;
         }
@@ -319,20 +305,16 @@ export class VisualizacaoComponent implements OnInit, AfterViewInit {
     doc.save('processo.pdf');
   }
 
-  // Função auxiliar para obter dimensões e formato da imagem
   private getImageProps(url: string): Promise<{ width: number; height: number; format: string }> {
     return new Promise((resolve, reject) => {
       const img = new Image();
       img.crossOrigin = 'anonymous';
       img.onload = () => {
-        const maxWidth = 180; // max largura da imagem no PDF em mm
+        const maxWidth = 180;
         const aspectRatio = img.width / img.height;
         let width = maxWidth;
         let height = width / aspectRatio;
-
-        // Ajuste de formato para jsPDF: png ou jpeg
         const format = url.endsWith('.png') ? 'PNG' : 'JPEG';
-
         resolve({ width, height, format });
       };
       img.onerror = reject;
