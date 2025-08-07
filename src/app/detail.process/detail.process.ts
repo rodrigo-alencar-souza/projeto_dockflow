@@ -90,7 +90,10 @@ export class VisualizacaoComponent implements OnInit, AfterViewInit {
       holder: 'editorjs',
       tools: {
         header: Header,
-        paragraph: Paragraph,
+        paragraph: {
+          class: Paragraph as any,
+          inlineToolbar: true
+        },
         list: List,
         // quote: Quote,
         code: CodeTool,

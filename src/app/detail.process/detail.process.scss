@@ -5,6 +5,17 @@ html, body {
   overflow: hidden; // se o app-sidebar controla a rolagem
 }
 
+/* Estilo para os blocos de texto do EditorJS */
+.ce-paragraph,
+.ce-header,
+.ce-list,
+.ce-quote {
+  white-space: pre-wrap;       // ✅ preserva quebras e permite quebra automática
+  word-wrap: break-word;       // ✅ quebra palavras longas
+  overflow-wrap: break-word;
+  line-height: 1.6;
+}
+
 
 .editor-wrapper {
   display: flex;
@@ -12,14 +23,15 @@ html, body {
   align-items: center;
   padding: 2rem;
   background-color: #16161d;
-  // overflow-y: auto;
-  // max-height: 100vh; // garante que a rolagem fique só aqui
+  overflow-y: auto;
+  max-height: 100vh; // garante que a rolagem fique só aqui
   scroll-behavior: smooth;
 }
 
 #editorjs {
   width: 100%;
   max-width: 210mm;
+  word-wrap: break-word;
   min-height: 297mm;
   background-color: #222222;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -71,3 +83,15 @@ html, body {
   color: whitesmoke !important;
   background-color: #222222;
 }
+
+::ng-deep .ce-paragraph,
+::ng-deep .ce-header,
+::ng-deep .ce-list,
+::ng-deep .ce-quote {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  line-height: 1.6;
+  color: #fdfcfc; // opcional, para contraste com fundo escuro
+}
+
