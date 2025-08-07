@@ -13,18 +13,18 @@ import { MatButtonModule } from '@angular/material/button';
 import { lastValueFrom } from 'rxjs';
 import { Processo } from '../service/process.service';
 
-
 interface EditorJSBlock {
-    type: string;
-    data: {
-      text: string;
-      [key: string]: any;
-    };
-  }
+  type: string;
+  data: {
+    text?: string;
+    [key: string]: any;
+  };
+}
 
-  interface EditorJSOutput {
-    blocks: EditorJSBlock[];
-  }
+interface EditorJSOutput {
+  blocks: EditorJSBlock[];
+}
+
 
 
 @Component({
@@ -99,44 +99,66 @@ export class VisualizacaoComponent implements OnInit, AfterViewInit {
         checklist: Checklist,
         image: ImageTool
       },
-      data: parsedData || {
-        blocks: [
-          {
-            type: 'header',
-            data: {
-              text: this.processo?.processo || 'Sem título disponível.',
-              level: 2,
-            }
-          },
-          {
-            type: 'paragraph',
-            data: { text: this.processo?.setor || 'Sem descrição disponível.' }
-          },
-          {
-            type: 'paragraph',
-            data: { text: this.processo?.nome || 'Sem nome disponível.' }
-          },
-          {
-            type: 'paragraph',
-            data: { text: this.processo?.cargo || 'Sem cargo disponível.' }
-          },
-          {
-            type: 'paragraph',
-            data: { text: this.processo?.descricao || 'Sem descrição disponível.' }
-          },
-          {
-            type: 'paragraph',
-            data: { text: this.processo?.passos || 'Sem passo a passo disponível.' }
-          },
-          {
-            type: 'header',
-            data: { text: `Setor: ${this.processo?.setor}`, level: 3 }
-          }
-        ]
-      }
+      data: parsedData || this.gerarConteudoPadronizado(this.processo)
     });
   }
-
+  gerarConteudoPadronizado(processo: Processo): EditorJSOutput {
+    return {
+      blocks: [
+        {
+          type: 'header',
+          data: {
+            text: processo.processo || 'Sem título disponível.',
+            level: 2
+          }
+        },
+        {
+          type: 'header',
+          data: {
+            text: 'Informações do Responsável',
+            level: 3
+          }
+        },
+        {
+          type: 'paragraph',
+          data: { text: `Nome: ${processo.nome}` }
+        },
+        {
+          type: 'paragraph',
+          data: { text: `Cargo: ${processo.cargo}` }
+        },
+        {
+          type: 'paragraph',
+          data: { text: `Setor: ${processo.setor}` }
+        },
+        {
+          type: 'header',
+          data: {
+            text: 'Descrição do Processo',
+            level: 3
+          }
+        },
+        {
+          type: 'paragraph',
+          data: { text: processo.descricao }
+        },
+        {
+          type: 'header',
+          data: {
+            text: 'Passo a Passo',
+            level: 3
+          }
+        },
+        {
+          type: 'list',
+          data: {
+            style: 'ordered',
+            items: processo.passos
+          }
+        }
+      ]
+    };
+  }
   
   private extrairTitulo(content: any): string {
     const headerBlock = content.blocks.find((b: any) => b.type === 'header');
@@ -144,19 +166,26 @@ export class VisualizacaoComponent implements OnInit, AfterViewInit {
   }
 
   extrairDescricao(content: EditorJSOutput): string {
-    const bloco = content.blocks.find(b => b.type === 'paragraph' && b.data.text.includes('Descrição:'));
-    return bloco ? bloco.data.text.replace('Descrição:', '').trim() : this.processo?.descricao || '';
+    const bloco = content.blocks.find(
+      (b: EditorJSBlock) => b.type === 'paragraph' && typeof b.data.text === 'string' && b.data.text.includes('Descrição:')
+    );
+    return bloco?.data.text ? bloco.data.text.replace('Descrição:', '').trim() : this.processo?.descricao || '';
   }
 
   extrairSetor(content: EditorJSOutput): string {
-    const bloco = content.blocks.find(b => b.type === 'paragraph' && b.data.text.includes('Setor:'));
-    return bloco ? bloco.data.text.replace('Setor:', '').trim() : this.processo?.setor || '';
+    const bloco = content.blocks.find(
+      (b: EditorJSBlock) => b.type === 'paragraph' && typeof b.data.text === 'string' && b.data.text.includes('Setor:')
+    );
+    return bloco?.data.text ? bloco.data.text.replace('Setor:', '').trim() : this.processo?.setor || '';
   }
 
   extrairCargo(content: EditorJSOutput): string {
-    const bloco = content.blocks.find(b => b.type === 'paragraph' && b.data.text.includes('Cargo:'));
-    return bloco ? bloco.data.text.replace('Cargo:', '').trim() : this.processo?.cargo || '';
+    const bloco = content.blocks.find(
+      (b: EditorJSBlock) => b.type === 'paragraph' && typeof b.data.text === 'string' && b.data.text.includes('Cargo:')
+    );
+    return bloco?.data.text ? bloco.data.text.replace('Cargo:', '').trim() : this.processo?.cargo || '';
   }
+
 
   async salvarEdicao(): Promise<void> {
     const dialogRef = this.dialog.open(ConfirmSaveComponent, {
