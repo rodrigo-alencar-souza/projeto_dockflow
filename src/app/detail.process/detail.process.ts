@@ -21,7 +21,6 @@ import { lastValueFrom } from 'rxjs';
     CommonModule,
     MatSnackBarModule,
     MatDialogModule,
-    ConfirmSaveComponent,
     MatButtonModule
   ],
   templateUrl: './detail.process.html',

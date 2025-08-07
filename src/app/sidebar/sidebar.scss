@@ -165,13 +165,14 @@ mat-sidenav {
       display:flex;
       color: #f8f6f6;
       font-weight: bold;
+      padding: 1rem; // opcional, para garantir área confortável
     }
 
     &:hover {
       background-color: #a50034;
-      color: #16161d;
+      color: #16161d; 
     }
-
+    
   }
 }
 
