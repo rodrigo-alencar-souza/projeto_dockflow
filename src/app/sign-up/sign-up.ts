@@ -120,11 +120,7 @@ export class SignUp implements OnInit {
     dadosProcesso.passos = dadosProcesso.passos.toLowerCase();
 
     const jsonPayload = JSON.stringify(dadosProcesso);
-
-
-
        console.log('Dados do formulário:', jsonPayload); // Aqui você pode enviar os dados para um serviço ou backend } } } 
-
 
     this.apiprocessService.postDados(dadosProcesso).subscribe({
       next: (resposta) => {

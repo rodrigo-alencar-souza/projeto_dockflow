@@ -107,7 +107,7 @@ export class Adm {
       if (result) {
         this.approvedUsers = this.approvedUsers.filter(u => u !== user);
         this.snackBar.open(`🗑️ ${user.name} foi removido com sucesso`, 'Fechar', { duration: 3000 });
-        this.cdr.detectChanges(); // 💥 força o Angular a re-renderizar a view
+        this.cdr.detectChanges(); 
       }
     });
 }

@@ -11,6 +11,20 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { lastValueFrom } from 'rxjs';
+import { Processo } from '../service/process.service';
+
+
+interface EditorJSBlock {
+    type: string;
+    data: {
+      text: string;
+      [key: string]: any;
+    };
+  }
+
+  interface EditorJSOutput {
+    blocks: EditorJSBlock[];
+  }
 
 
 @Component({
@@ -123,6 +137,27 @@ export class VisualizacaoComponent implements OnInit, AfterViewInit {
     });
   }
 
+  
+  private extrairTitulo(content: any): string {
+    const headerBlock = content.blocks.find((b: any) => b.type === 'header');
+    return headerBlock?.data?.text || this.processo?.processo || 'Sem título';
+  }
+
+  extrairDescricao(content: EditorJSOutput): string {
+    const bloco = content.blocks.find(b => b.type === 'paragraph' && b.data.text.includes('Descrição:'));
+    return bloco ? bloco.data.text.replace('Descrição:', '').trim() : this.processo?.descricao || '';
+  }
+
+  extrairSetor(content: EditorJSOutput): string {
+    const bloco = content.blocks.find(b => b.type === 'paragraph' && b.data.text.includes('Setor:'));
+    return bloco ? bloco.data.text.replace('Setor:', '').trim() : this.processo?.setor || '';
+  }
+
+  extrairCargo(content: EditorJSOutput): string {
+    const bloco = content.blocks.find(b => b.type === 'paragraph' && b.data.text.includes('Cargo:'));
+    return bloco ? bloco.data.text.replace('Cargo:', '').trim() : this.processo?.cargo || '';
+  }
+
   async salvarEdicao(): Promise<void> {
     const dialogRef = this.dialog.open(ConfirmSaveComponent, {
       width: '350px'
@@ -137,7 +172,26 @@ export class VisualizacaoComponent implements OnInit, AfterViewInit {
       this.snackBar.open('✅ Alterações salvas com sucesso!', 'Fechar', {
         duration: 3000
       });
+
+      if (this.processo) {
+        const novoTitulo = this.extrairTitulo(content);
+        const novaDescricao = this.extrairDescricao(content);
+        const novoSetor = this.extrairSetor(content);
+        const novoCargo = this.extrairCargo(content);
+
+        const processoAtualizado: Processo = {
+          ...this.processo,
+          processo: novoTitulo,
+          descricao: novaDescricao,
+          setor: novoSetor,
+          cargo: novoCargo
+        };
+
+        const indexGlobal = this.processoService.getIndiceGlobal(this.processo);
+        this.processoService.atualizarProcesso(indexGlobal, processoAtualizado);
+      }
     }
+
   }
 
   async exportarPDF(): Promise<void> {
