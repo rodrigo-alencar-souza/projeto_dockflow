@@ -58,28 +58,27 @@ export class CardComponent implements OnInit {
   }
 
   atualizarLista(): void {
-  const todosProcessos = this.processoService.getTodosProcessos();
-  const isAdmin = this.auth.getUserRole() === PerfilUsuario.ADM;
-  const setorUsuario = this.auth.getSetor();
-  console.log('ADM?', isAdmin);
-  console.log('Processos recebidos:', todosProcessos);
+    const todosProcessos = this.processoService.getTodosProcessos();
+    const isAdmin = this.auth.getUserRole() === PerfilUsuario.ADM;
+    const setorUsuario = this.auth.getSetor();
 
-  this.processosPorSetor = todosProcessos.filter((processo: Processo) => {
-    // 🔍 Se estiver na aba 'geral', exibe apenas processos do setor 'geral' (tanto pra ADM quanto usuário comum)
-    if (this.abaSelecionada === 'geral') {
-      return processo.setor === 'geral';
-    }
+    this.processosPorSetor = todosProcessos.filter((processo: Processo) => {
+      if (this.abaSelecionada === 'geral') {
+        return processo.setor === 'geral';
+      }
 
-    // 🧑‍💼 Para ADM: exibe os processos do setor da aba (sem incluir os 'gerais')
-    if (isAdmin) {
-      return processo.setor === this.abaSelecionada;
-    }
+      if (isAdmin) {
+        return processo.setor === this.abaSelecionada;
+      }
 
-    // 👤 Para usuário comum: exibe processos do setor da aba apenas se pertencer ao setor do usuário
-    return processo.setor === this.abaSelecionada &&
-           processo.setor === setorUsuario;
-  });
-}
+      return processo.setor === this.abaSelecionada &&
+            processo.setor === setorUsuario;
+    });
+
+    this.processosPorSetor = [...this.processosPorSetor]; // ✅ força nova referência
+    this.cdr.detectChanges(); // ✅ força re-renderização
+  }
+
 
 
   abrirDetalhes(processo: Processo): void {
@@ -90,9 +89,13 @@ export class CardComponent implements OnInit {
   editarProcesso(index: number): void {
     const processoVisivel = this.processosPorSetor[index];
     const indexGlobal = this.processoService.getIndiceGlobal(processoVisivel);
-    this.processoService.setProcessoSelecionado(processoVisivel);
-    this.router.navigate(['/sign-up']);
+
+    this.processoService.setIndiceEdicao(indexGlobal); // ✅ define índice
+    this.processoService.setProcessoSelecionado(processoVisivel); // opcional
+
+    this.router.navigate(['/sign-up']); // ✅ navega para o formulário
   }
+
 
   excluirProcesso(index: number): void {
     const dialogRef = this.dialog.open(DeleteConfirmationComponent, {

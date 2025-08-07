@@ -65,6 +65,8 @@ export class SignUp implements OnInit {
   ngOnInit(): void {
     const setorLogado = this.auth.getSetor()?.toLowerCase().trim();
     const isAdmin = this.auth.isAdmin();
+    this.indexEdicao = this.processoService.getIndiceEdicao(); // ✅ recupera índice
+
 
     const todosSetores = ['geral', 'engenharia', 'fiscal', 'producao'];
 
@@ -88,7 +90,6 @@ export class SignUp implements OnInit {
       passos: [''],
     });
 
-    this.indexEdicao = this.processoService.getIndiceEdicao();
 
     if (this.indexEdicao !== null) {
       const processo = this.processoService.getProcessoPorIndice(this.indexEdicao);
@@ -106,6 +107,7 @@ export class SignUp implements OnInit {
     } else {
       this.registerForm.patchValue({ setor: setorLogado });
     }
+
   }
 
 
@@ -164,6 +166,7 @@ export class SignUp implements OnInit {
       this.snackBar.open('Processo cadastrado com sucesso!', '', { duration: 3000 });
     }
 
+    this.processoService.clearEdicao(); // ✅ encerra modo edição
     this.router.navigate(['home']);
   }
 
