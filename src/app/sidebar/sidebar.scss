@@ -1,5 +1,8 @@
 .container {
   height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; // impede rolagem duplicada no container
 }
 
 .slide-out-right {
@@ -97,6 +100,8 @@
 
 // Conteúdo principal
 mat-sidenav-content {
+  height: 100%;
+  overflow-y: auto; // rolagem única aqui
   padding: 1rem;
   background-color: #16161d;
   color: #fff;

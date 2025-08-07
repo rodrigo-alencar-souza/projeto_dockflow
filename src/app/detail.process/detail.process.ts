@@ -92,11 +92,11 @@ export class VisualizacaoComponent implements OnInit, AfterViewInit {
         header: Header,
         paragraph: Paragraph,
         list: List,
-        quote: Quote,
+        // quote: Quote,
         code: CodeTool,
         table: Table,
         delimiter: Delimiter,
-        checklist: Checklist,
+        // checklist: Checklist,
         image: ImageTool
       },
       data: parsedData || this.gerarConteudoPadronizado(this.processo)
@@ -296,7 +296,24 @@ export class VisualizacaoComponent implements OnInit, AfterViewInit {
 
           for (let i = 0; i < items.length; i++) {
             const prefix = style === 'ordered' ? `${i + 1}. ` : '• ';
-            const itemText = typeof items[i] === 'string' ? items[i] : JSON.stringify(items[i]);
+
+            const item = items[i];
+            let itemText = '';
+
+            if (typeof item === 'string') {
+              itemText = item;
+            } else if (typeof item === 'object' && item !== null) {
+              const maybeContent = (item as { content?: string }).content;
+              const maybeText = (item as { text?: string }).text;
+
+              if (typeof maybeContent === 'string') {
+                itemText = maybeContent;
+              } else if (typeof maybeText === 'string') {
+                itemText = maybeText;
+              }
+            }
+
+
             const lines = doc.splitTextToSize(prefix + itemText, maxLineWidth);
             ensureSpace(lines.length * lineHeight + 5);
             doc.text(lines, margin, currentHeight);
@@ -391,6 +408,7 @@ export class VisualizacaoComponent implements OnInit, AfterViewInit {
           }
 
           currentHeight = tableTop + 5;
+          currentHeight += 10; // Espaço extra após a tabela
           break;
         }
 
