@@ -2,7 +2,7 @@ html, body {
   margin: 0;
   padding: 0;
   height: 100%;
-  overflow: hidden; // se o app-sidebar controla a rolagem
+  overflow: auto;
 }
 
 
@@ -27,12 +27,13 @@ app-sidebar {
 .editor-wrapper {
   display: flex;
   flex: 1; // ocupa o espaço restante do app-sidebar
+  overflow-y: visible; // ✅ rolagem única aqui
   flex-direction: column;
   align-items: center;
   padding: 2rem;
   background-color: #16161d;
   overflow-y: auto;
-  max-height: 100vh; // garante que a rolagem fique só aqui
+  max-height: none; // garante que a rolagem fique só aqui
   scroll-behavior: smooth;
 }
 
