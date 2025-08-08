@@ -2,6 +2,7 @@
     <button (click) = "Back_button_navigate()">Voltar</button>
   </div>
 
+<div class="form-scroll-wrapper">
 <mat-card class="register-container">
 <h2>Cadastro de Usuário</h2>
 <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
@@ -74,6 +75,7 @@
 <button mat-raised-button color="primary" class="button-reset" type="reset">Limpar</button>
 </form>
 </mat-card>
+</div>  
 
 <div class="footer">
 <br>
