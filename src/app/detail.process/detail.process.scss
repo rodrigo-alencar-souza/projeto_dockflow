@@ -5,6 +5,13 @@ html, body {
   overflow: hidden; // se o app-sidebar controla a rolagem
 }
 
+
+app-sidebar {
+  display: flex;
+  flex-direction: column;
+  height: 100vh; // ocupa toda a tela
+}
+
 /* Estilo para os blocos de texto do EditorJS */
 .ce-paragraph,
 .ce-header,
@@ -19,6 +26,7 @@ html, body {
 
 .editor-wrapper {
   display: flex;
+  flex: 1; // ocupa o espaço restante do app-sidebar
   flex-direction: column;
   align-items: center;
   padding: 2rem;
@@ -32,7 +40,8 @@ html, body {
   width: 100%;
   max-width: 210mm;
   word-wrap: break-word;
-  min-height: 297mm;
+  // min-height: 297mm;
+  min-height: auto;
   background-color: #222222;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   padding: 40px;
