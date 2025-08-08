@@ -1,12 +1,5 @@
-// body {
-//   margin: 0;
-//   font-family: Arial, sans-serif;
-//   background-color: #000;
-//   color: #fff;
-// }
-
 .back-button button {
-  background-color: #e50914;
+  background-color: #a50034;
   color: #fdfcfc;
   position: relative;
   margin-top: 10px;
@@ -21,13 +14,13 @@
 
 .login-container {
   max-width: 400px;
-  margin: 5rem auto;
+  margin: 11% auto;
   padding: 2rem;
-  background-color: #111;
-  border: 1px solid #e50914;
+  background-color: #222;
+  border: 1px solid #a50034;
   border-radius: 8px;
   text-align: center;
-}
+
 
 .login-container h2 {
   color: #fffefe;
@@ -39,21 +32,34 @@
   flex-direction: column;
 }
 
-.login-form input {
-  padding: 0.75rem;
-  margin-bottom: 1rem;
-  border: none;
-  border-radius: 4px;
-  background-color: #222;
-  color: #fff;
+mat-form-field { 
+   .mat-form-field-infix {
+      background-color: #b10e0e;
+      color: #faf2f2;
 }
 
-.login-form input::placeholder {
-  color: #aaa;
 }
+
+
+
+// .login-form input {
+//   // padding: 0.75rem;
+//   // margin-bottom: 1rem;
+//   // border: none;
+//   // border-radius: 4px;
+//   width: 100%;
+//   height: 100%;
+//   background-color: #222;
+//   color: #fffdfd;
+// }
+
+
+// .login-form input::placeholder {
+//   color: #aaa;
+// }
 
 .login-form button {
-  background-color: #e50914;
+  background-color: #a50034;
   color: #f8f8f8;
   padding: 0.75rem;
   border: none;
@@ -64,14 +70,14 @@
 }
 
 .login-form button:hover {
-  background-color: #ff1a1a;
+  background-color: #b10e0e;
 }
 
 .register-text{
   margin-top: 1rem;
   color: #ccc;
   a {
-    color: #ff1a1a;
+    color: #b10e0e;
     text-decoration: none;
     &:hover{
       text-decoration: underline;
@@ -79,4 +85,4 @@
     }
   }
 }
-
+}

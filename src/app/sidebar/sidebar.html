@@ -1,0 +1,38 @@
+<mat-toolbar color="primary" class="custom-toolbar">
+  <button mat-icon-button class="icon_sidebar_button" (click)="sidenav.toggle()" aria-label="Fechar Sidebar" class="menu-icon">
+    <mat-icon class="icon_sidebar">menu</mat-icon>
+  </button>
+  <span class="toolbar-title">📕DockFlow</span>
+  <div class="button">
+        <button class="login-button" routerLink="/login" > Login </button>
+  </div>
+</mat-toolbar>
+
+<mat-sidenav-container class="container">
+  <mat-sidenav #sidenav mode="side" [(opened)]="sidebarAberta">
+    <mat-nav-list class="nav-list">
+      <mat-list-item *ngIf="authService.isAdmin()">
+        <span matLine class="text-nav" routerLink="/painel-adm"> Painel ADM </span>
+      </mat-list-item>
+      <mat-list-item >
+        <span matLine  class="text-nav" routerLink="/geral"> Geral </span>
+      </mat-list-item>
+      <mat-list-item>
+        <span matLine  class="text-nav" routerLink="/engenharia"> Engenharia </span>
+      </mat-list-item>  
+      <mat-list-item>
+        <span matLine  class="text-nav" routerLink="/fiscal"> Fiscal </span>
+      </mat-list-item>  
+      <mat-list-item>
+        <span matLine  class="text-nav" routerLink="/producao"> Produção </span>
+      </mat-list-item>  
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <div>
+      <ng-content></ng-content>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>
+

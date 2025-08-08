@@ -1,11 +1,23 @@
 import { Component } from '@angular/core';
+import { RouterModule } from '@angular/router';
+import { Sidebar } from '../sidebar/sidebar';
+import { CardComponent } from '../card/card.component';
+import { Router } from '@angular/router';
+import { ProcessoService } from '../service/processo.service';
+import { Processo } from '../models/processo.model';
 
 @Component({
   selector: 'app-engineering',
-  imports: [],
+  imports: [RouterModule, Sidebar, CardComponent],
   templateUrl: './engineering.html',
   styleUrl: './engineering.scss'
 })
 export class Engineering {
+  processos: Processo[] = [];
 
+  constructor(private processosService: ProcessoService) {}
+
+  ngOnInit() {
+    this.processos = this.processosService.getProcessosVisiveis();
+  }
 }
