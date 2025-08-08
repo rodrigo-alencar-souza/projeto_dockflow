@@ -1,116 +1,256 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatTableModule } from '@angular/material/table';
-import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatCheckboxModule, MatCheckboxChange } from '@angular/material/checkbox';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { FormsModule } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
-import { DeleteConfirmationComponent } from '../delete-confirmation/delete-confirmation';
-import { MatDialogModule } from '@angular/material/dialog';
-import { ChangeDetectorRef } from '@angular/core';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+
 import { Sidebar } from '../sidebar/sidebar';
-
-
-interface Process {
-  name: string;
-}
+import { DeleteConfirmationComponent } from '../delete-confirmation/delete-confirmation';
+import { ApiUserService } from '../service/api.user.service';
+import { ApiProcessService } from '../service/api.process.service';
 
 interface User {
+  id: number;
   name: string;
-  general: boolean;
-  engineering: boolean;
-  production: boolean;
+  permissions: string[];
 }
+
+type ProcessStatus = 'pending' | 'approved' | 'rejected';
+
+interface Process {
+  id: string;
+  nome: string;
+  setor: string;
+  cargo: string;
+  processo: string;
+  descricao: string;
+  status: ProcessStatus;
+}
+
 
 @Component({
   selector: 'app-adm',
+  standalone: true,
   imports: [
     CommonModule,
+    FormsModule,
     MatCardModule,
     MatTableModule,
     MatCheckboxModule,
     MatButtonModule,
     MatIconModule,
-    MatToolbarModule,
     MatSnackBarModule,
-    FormsModule,
     MatDialogModule,
     Sidebar
   ],
-  standalone: true,
   templateUrl: './adm.html',
   styleUrls: ['./adm.scss']
 })
-export class Adm {
-  constructor(private snackBar: MatSnackBar, private dialog: MatDialog, private cdr: ChangeDetectorRef, ) {}
+export class Adm implements OnInit {
 
-  userData: User[] = [
-    { name: 'Carlos Lima', general: true, engineering: false, production: true },
-    { name: 'Marina Souza', general: false, engineering: true, production: false },
-    { name: 'Felipe Rocha', general: true, engineering: true, production: true }
+  allPermissions         = ['geral','engenharia','produção','fiscal'];
+  userDisplayedColumns   = ['user', ...this.allPermissions, 'status'];
+  approvedUserColumns    = ['user', ...this.allPermissions, 'action'];
+
+  processDisplayedColumns: string[] = [
+    'id',
+    'nome',
+    'setor',
+    'cargo',
+    'processo',
+    'descricao',
+    'status',
+    'actions'
   ];
 
-  approvedUsers: User[] = [];
-  processData: Process[] = [
-    { name: 'Processo A' },
-    { name: 'Processo B' },
-    { name: 'Processo C' }
+  approvedProcessColumns: string[] = [
+    'id',
+    'nome',
+    'setor',
+    'cargo',
+    'processo',
+    'descricao',
+    'status',
+    'action'
   ];
 
-  userDisplayedColumns: string[] = ['user', 'general', 'engineering', 'production', 'status'];
-  approvedUserColumns: string[] = ['user', 'general', 'engineering', 'production', 'action'];
-  processDisplayedColumns: string[] = ['process', 'status'];
+
+
+  userData: User[]           = [];
+  approvedUsers: User[]      = [];
+
+  processData: Process[]     = [];
+  approvedProcesses: Process[]= [];
+
+  constructor(
+    private apiUser: ApiUserService,
+    private apiProcess: ApiProcessService,
+    private snackBar: MatSnackBar,
+    private dialog: MatDialog,
+    private cdr: ChangeDetectorRef      // injeção do ChangeDetectorRef
+  ) {}
+
+  ngOnInit(): void {
+    this.loadUsers();
+    this.loadProcesses();
+  }
+
+  // ====== Usuários ======
+  private loadUsers(): void {
+    this.apiUser.getDados().subscribe({
+      next: (users: any[]) => {
+        this.userData = users
+          .filter(u => u.status === 'pending')
+          .map(u => ({ id: u.id, name: u.nome, permissions: u.permissions }));
+
+        this.approvedUsers = users
+          .filter(u => u.status === 'approved')
+          .map(u => ({ id: u.id, name: u.nome, permissions: u.permissions }));
+
+        this.cdr.detectChanges();   // força nova detecção de mudanças
+      },
+      error: err => console.error(err)
+    });
+  }
+
+  togglePermission(user: User, perm: string, e: MatCheckboxChange): void {
+    if (e.checked) {
+      user.permissions.push(perm);
+    } else {
+      user.permissions = user.permissions.filter(p => p !== perm);
+    }
+  }
 
   approveUser(user: User): void {
-    if (!user.general && !user.engineering && !user.production) {
-      this.snackBar.open(`⚠️ Selecione ao menos uma permissão para ${user.name}`, 'Fechar', { duration: 3000 });
+    if (!user.permissions.length) {
+      this.snackBar.open(`Selecione ao menos uma permissão para ${user.name}`, 'Fechar', { duration: 3000 });
       return;
     }
 
-    this.snackBar.open(`✅ ${user.name} aprovado com permissões`, 'Fechar', { duration: 3000 });
-    this.userData = this.userData.filter(u => u !== user);
-    this.approvedUsers = [...this.approvedUsers, user];
+    this.apiUser.putDados(user.id, {
+      status: 'approved',
+      permissions: user.permissions
+    }).subscribe({
+      next: () => {
+        this.userData = this.userData.filter(u => u.id !== user.id);
+        this.approvedUsers.push(user);
+        this.snackBar.open(`${user.name} aprovado!`, 'Fechar', { duration: 3000 });
+        this.cdr.detectChanges();
+      },
+      error: err => console.error(err)
+    });
   }
 
   rejectUser(user: User): void {
-    console.log(`Usuário rejeitado: ${user.name}`);
-    this.snackBar.open(`❌ ${user.name} rejeitado.`, 'Fechar', { duration: 3000 });
-
-    this.userData = this.userData.filter(u => u !== user);
-  }
-
-  approveProcess(process: Process): void {
-    console.log(`Processo aprovado: ${process.name}`);
-    this.snackBar.open(`✅ ${process.name} aprovado!`, 'Fechar', { duration: 3000 });
-
-    this.processData = this.processData.filter(p => p !== process);
-  }
-
-  rejectProcess(process: Process): void {
-    console.log(`Processo rejeitado: ${process.name}`);
-    this.snackBar.open(`❌ ${process.name} rejeitado.`, 'Fechar', { duration: 3000 });
-
-    this.processData = this.processData.filter(p => p !== process);
+    this.apiUser.deleteDados(user.id).subscribe({
+      next: () => {
+        this.userData = this.userData.filter(u => u.id !== user.id);
+        this.snackBar.open(`${user.name} rejeitado.`, 'Fechar', { duration: 3000 });
+        this.cdr.detectChanges();
+      },
+      error: err => console.error(err)
+    });
   }
 
   confirmDelete(user: User): void {
-    const dialogRef = this.dialog.open(DeleteConfirmationComponent, {
+    const ref = this.dialog.open(DeleteConfirmationComponent, {
       width: '350px',
       data: { name: user.name }
     });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.approvedUsers = this.approvedUsers.filter(u => u !== user);
-        this.snackBar.open(`🗑️ ${user.name} foi removido com sucesso`, 'Fechar', { duration: 3000 });
-        this.cdr.detectChanges(); 
-      }
+    ref.afterClosed().subscribe(ok => {
+      if (!ok) return;
+      this.apiUser.deleteDados(user.id).subscribe({
+        next: () => {
+          this.approvedUsers = this.approvedUsers.filter(u => u.id !== user.id);
+          this.snackBar.open(`${user.name} removido.`, 'Fechar', { duration: 3000 });
+          this.cdr.detectChanges();
+        },
+        error: err => console.error(err)
+      });
     });
-}
+  }
 
-  
+  // ====== Processos ======
+ private loadProcesses(): void {
+    this.apiProcess.getDados().subscribe({
+      next: (procs: any[]) => {
+        // mapear resposta da API para nossa interface Process
+        this.processData = procs
+          .filter(p => p.status === 'pending')
+          .map(p => ({
+            id: String(p.id),
+            nome: p.nome,
+            setor: p.setor,
+            cargo: p.cargo,
+            processo: p.processo,
+            descricao: p.descricao,
+            status: p.status as ProcessStatus
+          }));
+
+        this.approvedProcesses = procs
+          .filter(p => p.status === 'approved')
+          .map(p => ({
+            id: String(p.id),
+            nome: p.nome,
+            setor: p.setor,
+            cargo: p.cargo,
+            processo: p.processo,
+            descricao: p.descricao,
+            status: p.status as ProcessStatus
+          }));
+
+        this.cdr.detectChanges();
+      },
+      error: err => console.error(err)
+    });
+  }
+
+  approveProcess(proc: Process): void {
+    this.apiProcess.putDados(+proc.id, { status: 'approved' }).subscribe({
+      next: () => {
+        // mover para aprovados
+        this.processData = this.processData.filter(p => p.id !== proc.id);
+        proc.status = 'approved';
+        this.approvedProcesses.push(proc);
+
+        this.snackBar.open(`✅ ${proc.processo} aprovado!`, 'Fechar', { duration: 3000 });
+        this.cdr.detectChanges();
+      },
+      error: err => console.error(err)
+    });
+  }
+
+  rejectProcess(proc: Process): void {
+    this.apiProcess.deleteDados(+proc.id).subscribe({
+      next: () => {
+        this.processData = this.processData.filter(p => p.id !== proc.id);
+        this.snackBar.open(`❌ ${proc.processo} rejeitado.`, 'Fechar', { duration: 3000 });
+        this.cdr.detectChanges();
+      },
+      error: err => console.error(err)
+    });
+  }
+
+  confirmDeleteProcess(proc: Process): void {
+    const ref = this.dialog.open(DeleteConfirmationComponent, {
+      width: '350px',
+      data: { name: proc.processo }
+    });
+    ref.afterClosed().subscribe(ok => {
+      if (!ok) return;
+      this.apiProcess.deleteDados(+proc.id).subscribe({
+        next: () => {
+          this.approvedProcesses = this.approvedProcesses.filter(p => p.id !== proc.id);
+          this.snackBar.open(`🗑️ ${proc.processo} removido.`, 'Fechar', { duration: 3000 });
+          this.cdr.detectChanges();
+        },
+        error: err => console.error(err)
+      });
+    });
+  }
 }

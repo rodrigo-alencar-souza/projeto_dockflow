@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -26,11 +26,14 @@ export class ApiProcessService {
     return this.http.post(`${this.baseUrl}/process/`, data, this.httpOptions);
   }
 
-  putDados(id: number, data: any): Observable<any> {
-    return this.http.put(`${this.baseUrl}/process/${id}`, data, this.httpOptions);
+   putDados(id: number, data: { status: string }) {
+    const params = new HttpParams().set('formulario_id', id.toString());
+    return this.http.put(`${this.baseUrl}/process/${id}`, data, { params });
   }
 
-  deleteDados(id: number): Observable<any> {
-    return this.http.delete(`${this.baseUrl}/process/${id}`, this.httpOptions);
+  deleteDados(id: number) {
+    const params = new HttpParams().set('formulario_id', id.toString());
+    return this.http.delete(`${this.baseUrl}/process/${id}`, { params });
   }
+
 }
