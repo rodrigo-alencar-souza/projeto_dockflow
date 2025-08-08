@@ -13,18 +13,19 @@ class ProcessCreate(BaseModel):
     cargo: str
     processo: str
     descricao: str
-    passos: str
+    passos: Optional[str] = None  # Agora é opcional
+
 
 
     
 
 class ProcessUpdate(BaseModel):
     nome: str | None = None
-    setor: str | None = None
-    cargo: str | None = None
-    processo: str | None = None
-    descricao: str | None = None
-    passos: str | None = None
+    setor: Optional[SectorEnum] = None
+    cargo: Optional[str]        = None
+    processo: Optional[str]     = None
+    descricao: Optional[str]    = None
+    passos: Optional[str]       = None
     status: Optional[StatusEnum]
 
 
